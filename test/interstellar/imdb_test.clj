@@ -9,7 +9,7 @@
 	(println headers)
 	(println status)
 	(println body)
-	(println (get body :rating))
+	(println (get body "Metascore"))
 	{:name name}))
 
 (deftest a-test
