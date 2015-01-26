@@ -8,6 +8,7 @@
 (defn imdb-find [name]
 	(let [{:keys [status headers body error]} @(http/get "http://www.omdbapi.com" {:query-params {:t name}})]
 		(let [jsontext (json/read-str body :key-fn keyword)] 
+(println body)
 		{
 			:name  (get jsontext :Title) 
 			:score (Integer/parseInt(get jsontext :Metascore))
