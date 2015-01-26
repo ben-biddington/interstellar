@@ -2,6 +2,7 @@
   (:require [clojure.test :refer :all]
             [interstellar.core :refer :all]
 	    [org.httpkit.client :as http]
+	    [clojure.data.json :as json]
 	    ))
 (defn imdb-find [name]
 
