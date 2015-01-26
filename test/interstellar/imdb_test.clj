@@ -19,7 +19,7 @@
 			:score 		(Double/parseDouble(get jsontext :imdbRating))
 		})))
 
-(deftest "Finding result from imdb"
+(deftest finding-imdb-results
   (testing "can, for example, find robocop"
     (let [result (imdb-find "robocop")]
       (is (= 67        (get result :metascore)))
