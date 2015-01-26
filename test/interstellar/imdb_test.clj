@@ -5,15 +5,23 @@
 	    [clojure.data.json :as json]
 	    ))
 
+(defn debug[] false)
+
 (defn imdb-find [name]
 	(let [{:keys [status headers body error]} @(http/get "http://www.omdbapi.com" {:query-params {:t name}})]
 		(let [jsontext (json/read-str body :key-fn keyword)] 
-(println body)
+
+		(if debug (println body))
+
 		{
-			:name  (get jsontext :Title) 
-			:score (Integer/parseInt(get jsontext :Metascore))
+			:title  	(get jsontext :Title) 
+			:metascore 	(Integer/parseInt(get jsontext :Metascore))
+			:score 		(Double/parseDouble(get jsontext :imdbRating))
 		})))
 
 (deftest a-test
   (testing "can find robocop"
-    (is (= {:name "RoboCop" :score 67} (imdb-find "robocop")))))
+    (let [result (imdb-find "robocop")]
+      (is (= 67        (get result :metascore)))
+      (is (= 7.5       (get result :score)))
+      (is (= "RoboCop" (get result :title))))))
