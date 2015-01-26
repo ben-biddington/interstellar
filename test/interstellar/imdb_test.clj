@@ -9,6 +9,7 @@
 	(println headers)
 	(println status)
 	(println body)
+	(println (get body :rating))
 	{:name name}))
 
 (deftest a-test
