@@ -4,9 +4,12 @@
 	    [org.httpkit.client :as http]
 	    ))
 (defn imdb-find [name]
-(let reply  
-	(http/get "http://www.omdbapi.com/?t=robocop"))
-	{:name name})
+
+(let [{:keys [status headers body error]} @(http/get "http://www.omdbapi.com/?t=robocop")]
+	(println headers)
+	(println status)
+	(println body)
+	{:name name}))
 
 (deftest a-test
   (testing "can find robocop"
