@@ -18,6 +18,16 @@
 			(struct fillum (get jsontext :Title) (Integer/parseInt(get jsontext :Metascore)) (Double/parseDouble(get jsontext :imdbRating)))
 		)))
 
+(defn imdb-find-by-id [id]
+	(let [{:keys [status headers body error]} @(http/get "http://www.omdbapi.com" {:query-params {:i id}})]
+		(let [jsontext (json/read-str body :key-fn keyword)] 
+
+			(if debug (println body))
+
+			(struct fillum (get jsontext :Title) (Integer/parseInt(get jsontext :Metascore)) (Double/parseDouble(get jsontext :imdbRating)))
+		)))
+
+
 (deftest finding-imdb-results
   (testing "can, for example, find robocop by name"
     (let [result (imdb-find "robocop")]
@@ -27,4 +37,4 @@
 
   (testing "can find by imdb id"
     (let [result (imdb-find-by-id "tt0076759")]
-      (is (= "Star Wars" (get result :title)))))))
+      (is (= "Star Wars: Episode IV - A New Hope" (get result :title))))))
