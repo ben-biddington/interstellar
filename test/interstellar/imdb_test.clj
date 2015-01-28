@@ -19,8 +19,12 @@
 		)))
 
 (deftest finding-imdb-results
-  (testing "can, for example, find robocop"
+  (testing "can, for example, find robocop by name"
     (let [result (imdb-find "robocop")]
       (is (= 67        (get result :metascore)))
       (is (= 7.5       (get result :score)))
-      (is (= "RoboCop" (get result :title))))))
+      (is (= "RoboCop" (get result :title)))))
+
+  (testing "can find by imdb id"
+    (let [result (imdb-find-by-id "tt0076759")]
+      (is (= "Star Wars" (get result :title)))))))
