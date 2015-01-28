@@ -7,17 +7,16 @@
 
 (def debug false)
 
+(defstruct fillum :title :metascore :score)
+
 (defn imdb-find [name]
 	(let [{:keys [status headers body error]} @(http/get "http://www.omdbapi.com" {:query-params {:t name}})]
 		(let [jsontext (json/read-str body :key-fn keyword)] 
 
-		(if debug (println body))
+			(if debug (println body))
 
-		{
-			:title  	(get jsontext :Title) 
-			:metascore 	(Integer/parseInt(get jsontext :Metascore))
-			:score 		(Double/parseDouble(get jsontext :imdbRating))
-		})))
+			(struct fillum (get jsontext :Title) (Integer/parseInt(get jsontext :Metascore)) (Double/parseDouble(get jsontext :imdbRating)))
+		)))
 
 (deftest finding-imdb-results
   (testing "can, for example, find robocop"
