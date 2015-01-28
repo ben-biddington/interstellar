@@ -5,7 +5,7 @@
 	    [clojure.data.json :as json]
 	    ))
 
-(defn debug[] false)
+(def debug false)
 
 (defn imdb-find [name]
 	(let [{:keys [status headers body error]} @(http/get "http://www.omdbapi.com" {:query-params {:t name}})]
