@@ -7,10 +7,12 @@
 
 (def debug false)
 
+(def earl "http://www.omdbapi.com" )
+
 (defstruct fillum :title :metascore :score)
 
 (defn imdb-find [name]
-	(let [{:keys [status headers body error]} @(http/get "http://www.omdbapi.com" {:query-params {:t name}})]
+	(let [{:keys [status headers body error]} @(http/get earl {:query-params {:t name}})]
 		(let [jsontext (json/read-str body :key-fn keyword)] 
 
 			(if debug (println body))
@@ -19,7 +21,7 @@
 		)))
 
 (defn imdb-find-by-id [id]
-	(let [{:keys [status headers body error]} @(http/get "http://www.omdbapi.com" {:query-params {:i id}})]
+	(let [{:keys [status headers body error]} @(http/get earl {:query-params {:i id}})]
 		(let [jsontext (json/read-str body :key-fn keyword)] 
 
 			(if debug (println body))
