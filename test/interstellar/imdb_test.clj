@@ -11,23 +11,21 @@
 
 (defstruct fillum :title :metascore :score)
 
-(defn imdb-find [name]
-	(let [{:keys [status headers body error]} @(http/get earl {:query-params {:t name}})]
+(defn omdb-query [opts]
+	(let [{:keys [status headers body error]} @(http/get earl {:query-params opts})]
 		(let [jsontext (json/read-str body :key-fn keyword)] 
 
 			(if debug (println body))
 
 			(struct fillum (get jsontext :Title) (Integer/parseInt(get jsontext :Metascore)) (Double/parseDouble(get jsontext :imdbRating)))
 		)))
+
+(defn imdb-find [name]
+	(omdb-query {:t name}))
+
 
 (defn imdb-find-by-id [id]
-	(let [{:keys [status headers body error]} @(http/get earl {:query-params {:i id}})]
-		(let [jsontext (json/read-str body :key-fn keyword)] 
-
-			(if debug (println body))
-
-			(struct fillum (get jsontext :Title) (Integer/parseInt(get jsontext :Metascore)) (Double/parseDouble(get jsontext :imdbRating)))
-		)))
+	(omdb-query {:i id}))
 
 
 (deftest finding-imdb-results
