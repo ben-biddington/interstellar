@@ -17,16 +17,13 @@
 
 			(if debug (println body))
 
-			(struct fillum (get jsontext :Title) (Integer/parseInt(get jsontext :Metascore)) (Double/parseDouble(get jsontext :imdbRating)))
-		)))
+			(struct fillum (get jsontext :Title) (Integer/parseInt(get jsontext :Metascore)) (Double/parseDouble(get jsontext :imdbRating))))))
 
 (defn imdb-find [name]
 	(omdb-query {:t name}))
 
-
 (defn imdb-find-by-id [id]
 	(omdb-query {:i id}))
-
 
 (deftest finding-imdb-results
   (testing "can, for example, find robocop by name"
