@@ -26,7 +26,7 @@
 	(omdb-query {:i id}))
 
 (defn imdb-find-multi-by-id 
-	([& ids](map imdb-find-by-id ids)))
+	([& ids](pmap imdb-find-by-id ids)))
 
 (deftest finding-imdb-results
   (testing "can, for example, find robocop by name"
