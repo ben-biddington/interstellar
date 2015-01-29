@@ -34,4 +34,5 @@
 
   (testing "can find by imdb id"
     (let [result (imdb-find-by-id "tt0076759")]
-      (is (= "Star Wars: Episode IV - A New Hope" (get result :title))))))
+      (is (= "Star Wars: Episode IV - A New Hope" (get result :title))
+      (is (= 8.7                                  (get result :score)))))))
