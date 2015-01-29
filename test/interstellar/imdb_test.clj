@@ -25,6 +25,9 @@
 (defn imdb-find-by-id [id]
 	(omdb-query {:i id}))
 
+(defn imdb-find-multi-by-id 
+	([& ids](map imdb-find-by-id ids)))
+
 (deftest finding-imdb-results
   (testing "can, for example, find robocop by name"
     (let [result (imdb-find "robocop")]
@@ -34,5 +37,10 @@
 
   (testing "can find by imdb id"
     (let [result (imdb-find-by-id "tt0076759")]
+      (is (= "Star Wars: Episode IV - A New Hope" (get result :title))
+      (is (= 8.7                                  (get result :score))))))
+
+  (testing "can find by more than one at a time"
+    (let [result (first (imdb-find-multi-by-id "tt0076759" "tt0120907"))]
       (is (= "Star Wars: Episode IV - A New Hope" (get result :title))
       (is (= 8.7                                  (get result :score)))))))
