@@ -2,16 +2,17 @@
   (:use net.cgrand.enlive-html)
   (:import java.net.URL) 
   (:require [clojure.test :refer :all]
-            [interstellar.core :refer :all]
-	    [org.httpkit.client :as http]
-	    [clojure.data.json :as json]))
+            [interstellar.core :refer :all])) 
 
-(defn kat-search[])
+(defn title[earl]
+	(first (-> earl URL. html-resource
+		(select [:title])
+	)))
 
-(deftest finding-imdb-results
-  (testing "can, for example, find robocop by name"
-    (let [result (kat-search)]
-      (is (= 67        (get result :metascore)))
+(deftest reading-web-pages
+  (testing "Make a web request and select the title like this"
+    (let [result (title "https://www.google.com")]
+      (is (= '("Google") (get result :content)))
 
       ))
 
