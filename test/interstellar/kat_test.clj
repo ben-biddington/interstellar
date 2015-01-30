@@ -54,4 +54,10 @@
       (is (< 0 (count result)))
       ))
 
+; The url returns gzip encoding so fail to read
+  (testing "[FAILING] Can read the links from kat.ph"
+    (let [result (filter (fn [e] (has-class? e "cellMainLink")) (links "http://kickass.so/movies/"))]
+      (is (< 0 (count result)))
+      ))
+
 	)
