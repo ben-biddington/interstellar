@@ -1,4 +1,6 @@
 (ns interstellar.kat-test
+  (:use net.cgrand.enlive-html)
+  (:import java.net.URL) 
   (:require [clojure.test :refer :all]
             [interstellar.core :refer :all]
 	    [org.httpkit.client :as http]
