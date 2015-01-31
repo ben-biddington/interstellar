@@ -12,7 +12,7 @@
 	(URL. text))
 
 (defn browser-get[earl,selector]
-	(select (html-resource (to-earl earl)) [selector]))
+	(select (html-resource (to-earl earl {:accept "text/html"})) [selector]))
 
 (defn body[earl]
 	(browser-get earl :body))
