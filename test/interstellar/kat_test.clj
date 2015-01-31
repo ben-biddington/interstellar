@@ -1,6 +1,7 @@
 (ns interstellar.kat-test
   (:use net.cgrand.enlive-html)
   (:import java.net.URL) 
+  (:import java.util.zip.GZIPInputStream)
   (:require [net.cgrand.tagsoup :as tagsoup])
   (:require [net.cgrand.xml :as xml])
   (:require [clojure.test :refer :all]
@@ -10,19 +11,19 @@
   (with-open [^java.io.Closeable stream stream]
     (xml/parse (org.xml.sax.InputSource. stream))))
 
-(defn html-parser [stream]
+(defn gzip-html-parser [stream]
   (with-open [^java.io.Closeable stream stream]
-  (tagsoup/parser stream)))
-
-(defn title[earl]
-	(first (-> earl URL. html-resource
-		(select [:title]))))
+    (let [zip (GZIPInputStream. stream)]
+    (tagsoup/parser zip))))
 
 (defn to-earl[text]
 	(URL. text))
 
 (defn browser-get[earl,selector]
-	(select (html-resource (to-earl earl) {:parser html-parser }) [selector]))
+	(select (html-resource (to-earl earl) {:parser gzip-html-parser }) [selector]))
+
+(defn title[earl]
+	(browser-get earl :title))
 
 (defn body[earl]
 	(browser-get earl :body))
@@ -33,36 +34,17 @@
 (defn has-class?[element, name]
 	(= name (get (get element :attrs) :class)))
 
-(def earl "https://www.google.com")
+(def earl "http://kickass.so")
 
 (deftest ^:integration reading-web-pages
-
-  (testing "Make a web request and select the body like this"
-    (let [result (body earl)]
-      (is (< 0 (count result)))))
-
-   (testing "Make a web request an select the title like this"
-    (let [result (title earl)]
-      (is (= '("Google") (get result :content)))))
 
   (testing "Select all links like this"
     (let [result (links earl)]
       (is (< 0 (count result)))
       ))
 
-  (testing "Make an earl like this"
-    (let [result (to-earl "http://google.com")]
-      (is (= java.net.URL (type result)))
-      ))
-
   (testing "Select all links with css class by filtering like this"
-    (let [result (filter (fn [e] (has-class? e "gb1")) (links earl))]
-      (is (< 0 (count result)))
-      ))
-
-; The url returns gzip encoding so fail to read
-  (testing "[FAILING] Can read the links from kat.ph"
-    (let [result (filter (fn [e] (has-class? e "cellMainLink")) (links "http://kickass.so/movies/"))]
+    (let [result (filter (fn [e] (has-class? e "cellMainLink")) (links earl))]
       (is (< 0 (count result)))
       ))
 )
