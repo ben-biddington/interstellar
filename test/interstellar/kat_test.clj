@@ -11,23 +11,25 @@
 (defn to-earl[text]
 	(URL. text))
 
+(defn browser-get[earl,selector]
+	(select (html-resource (to-earl earl)) [selector]))
+
 (defn body[earl]
-	(select (html-resource (to-earl earl)) [:body]))
+	(browser-get earl :body))
 
 (defn links[earl]
-	(select (html-resource (to-earl earl)) [:a]))
+	(browser-get earl :a))
 
 (defn has-class?[element, name]
 	(= name (get (get element :attrs) :class)))
 
 (def earl "https://www.google.com")
 
-(deftest reading-web-pages
+(deftest ^:integration reading-web-pages
 
   (testing "Make a web request and select the body like this"
     (let [result (body earl)]
-      (is (< 0 (count result)))
-      ))
+      (is (< 0 (count result)))))
 
   (testing "Make a web request and select the title like this"
     (let [result (title earl)]
