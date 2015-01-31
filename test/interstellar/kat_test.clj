@@ -1,8 +1,13 @@
 (ns interstellar.kat-test
   (:use net.cgrand.enlive-html)
   (:import java.net.URL) 
+  (:require [net.cgrand.xml :as xml])
   (:require [clojure.test :refer :all]
             [interstellar.core :refer :all]))
+
+(defn my-custom-xml-parser [stream]
+  (with-open [^java.io.Closeable stream stream]
+    (xml/parse (org.xml.sax.InputSource. stream))))
 
 (defn title[earl]
 	(first (-> earl URL. html-resource
@@ -12,7 +17,7 @@
 	(URL. text))
 
 (defn browser-get[earl,selector]
-	(select (html-resource (to-earl earl) {:accept "text/html"}) [selector]))
+	(select (html-resource (to-earl earl) {:parser my-custom-xml-parser}) [selector]))
 
 (defn body[earl]
 	(browser-get earl :body))
@@ -31,7 +36,7 @@
     (let [result (body earl)]
       (is (< 0 (count result)))))
 
-  (testing "Make a web request and select the title like this"
+   "Make a web request an select the title like this"
     (let [result (title earl)]
       (is (= '("Google") (get result :content)))
       ))
