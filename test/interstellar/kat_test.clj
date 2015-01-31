@@ -11,7 +11,8 @@
     (xml/parse (org.xml.sax.InputSource. stream))))
 
 (defn html-parser [stream]
-  (tagsoup/parser stream))
+  (with-open [^java.io.Closeable stream stream]
+  (tagsoup/parser stream)))
 
 (defn title[earl]
 	(first (-> earl URL. html-resource
