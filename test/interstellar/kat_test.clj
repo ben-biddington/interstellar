@@ -1,6 +1,7 @@
 (ns interstellar.kat-test
   (:use net.cgrand.enlive-html)
   (:import java.net.URL) 
+  (:require [net.cgrand.tagsoup :as tagsoup])
   (:require [net.cgrand.xml :as xml])
   (:require [clojure.test :refer :all]
             [interstellar.core :refer :all]))
@@ -8,6 +9,9 @@
 (defn my-custom-xml-parser [stream]
   (with-open [^java.io.Closeable stream stream]
     (xml/parse (org.xml.sax.InputSource. stream))))
+
+(defn html-parser [stream]
+  (tagsoup/parser stream))
 
 (defn title[earl]
 	(first (-> earl URL. html-resource
@@ -17,7 +21,7 @@
 	(URL. text))
 
 (defn browser-get[earl,selector]
-	(select (html-resource (to-earl earl) {:parser my-custom-xml-parser}) [selector]))
+	(select (html-resource (to-earl earl) {:parser html-parser }) [selector]))
 
 (defn body[earl]
 	(browser-get earl :body))
@@ -36,10 +40,9 @@
     (let [result (body earl)]
       (is (< 0 (count result)))))
 
-   "Make a web request an select the title like this"
+   (testing "Make a web request an select the title like this"
     (let [result (title earl)]
-      (is (= '("Google") (get result :content)))
-      ))
+      (is (= '("Google") (get result :content)))))
 
   (testing "Select all links like this"
     (let [result (links earl)]
@@ -61,5 +64,4 @@
     (let [result (filter (fn [e] (has-class? e "cellMainLink")) (links "http://kickass.so/movies/"))]
       (is (< 0 (count result)))
       ))
-
-	)
+)
