@@ -6,21 +6,16 @@
 
 (defn title[earl]
 	(first (-> earl URL. html-resource
-		(select [:title])
-	)))
+		(select [:title]))))
 
 (defn to-earl[text]
-	(URL. text)
-)
+	(URL. text))
 
 (defn body[earl]
-	(select (html-resource (to-earl earl)) [:body])
-	)
+	(select (html-resource (to-earl earl)) [:body]))
 
 (defn links[earl]
-	(-> earl URL. html-resource
-		(select [:a])
-	))
+	(select (html-resource (to-earl earl)) [:a]))
 
 (defn has-class?[element, name]
 	(= name (get (get element :attrs) :class)))
