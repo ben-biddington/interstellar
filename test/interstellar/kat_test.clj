@@ -34,19 +34,20 @@
 
 (defn has-href-matching?[element, name]
   (let [href (get (get element :attrs) :href)]
-    (if (nil? href) nil (= true (.contains href name)) )
-  )
-)
+    (if (nil? href) nil (= true (.contains href name)))))
 
 (defn has-class?[element, name]
-	(= name (get (get element :attrs) :class))
-)
+	(= name (get (get element :attrs) :class)))
+
 (def earl "http://kickass.so")
 
-(defn imdb-rating[name]
-	(links (str earl name))
-	)
+(defn detail[name]
+	(links (str earl name)))
 
+(defn imdb-link[url]
+  (let [link (filter (fn [e] (has-href-matching? e "imdb")) (detail url))]
+     (get (get (first link) :attrs) :href)))
+	
 (deftest ^:integration reading-web-pages
 
   (testing "Select all links like this"
@@ -59,9 +60,8 @@
       (is (< 0 (count result)))
       ))
 
-  (testing "Find an imdb rating like this"
-    (let [result (filter (fn [e] (has-href-matching? e "imdb")) (imdb-rating "/wild-card-2015-hdrip-xvid-juggs-etrg-t10146153.html"))]
-(println result)
-      (is (< 0 (count result)))
+  (testing "Find an imdb link like this"
+    (let [result (imdb-link "/wild-card-2015-hdrip-xvid-juggs-etrg-t10146153.html")]
+      (is (.contains result "imdb.com" ))
       ))
 )
