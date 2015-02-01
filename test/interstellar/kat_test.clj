@@ -1,6 +1,7 @@
 (ns interstellar.kat-test
   (:use net.cgrand.enlive-html)
   (:import java.net.URL) 
+  (:import java.lang.String)
   (:import java.util.zip.GZIPInputStream)
   (:require [net.cgrand.tagsoup :as tagsoup])
   (:require [net.cgrand.xml :as xml])
@@ -31,10 +32,20 @@
 (defn links[earl]
 	(browser-get earl :a))
 
-(defn has-class?[element, name]
-	(= name (get (get element :attrs) :class)))
+(defn has-href-matching?[element, name]
+  (let [href (get (get element :attrs) :href)]
+    (if (nil? href) nil (= true (.contains href name)) )
+  )
+)
 
+(defn has-class?[element, name]
+	(= name (get (get element :attrs) :class))
+)
 (def earl "http://kickass.so")
+
+(defn imdb-rating[name]
+	(links (str earl name))
+	)
 
 (deftest ^:integration reading-web-pages
 
@@ -45,6 +56,12 @@
 
   (testing "Select all links with css class by filtering like this"
     (let [result (filter (fn [e] (has-class? e "cellMainLink")) (links earl))]
+      (is (< 0 (count result)))
+      ))
+
+  (testing "Find an imdb rating like this"
+    (let [result (filter (fn [e] (has-href-matching? e "imdb")) (imdb-rating "/wild-card-2015-hdrip-xvid-juggs-etrg-t10146153.html"))]
+(println result)
       (is (< 0 (count result)))
       ))
 )
