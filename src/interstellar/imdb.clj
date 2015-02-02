@@ -11,7 +11,7 @@
 (defn omdb-query [opts]
   (let [{:keys [status headers body error]} @(http/get earl {:query-params opts})]
     (let [jsontext (json/read-str body :key-fn keyword)] 
-      (struct fillum (get jsontext :Title) (Integer/parseInt(get jsontext :Metascore)) (Double/parseDouble(get jsontext :imdbRating))))))
+      (struct fillum (get jsontext :Title) (get jsontext :Metascore) (get jsontext :imdbRating)))))
 
 (defn imdb-find [name]
   (omdb-query {:t name}))

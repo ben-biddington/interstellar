@@ -6,10 +6,6 @@
   (:require [net.cgrand.tagsoup :as tagsoup])
   (:require [net.cgrand.xml :as xml]))
 
-(defn my-custom-xml-parser [stream]
-  (with-open [^java.io.Closeable stream stream]
-    (xml/parse (org.xml.sax.InputSource. stream))))
-
 (defn gzip-html-parser [stream]
   (with-open [^java.io.Closeable stream stream]
     (let [zip (GZIPInputStream. stream)]
@@ -38,6 +34,13 @@
 	(= name (get (get element :attrs) :class)))
 
 (def ^{:private true} earl "http://kickass.so")
+
+(defn ^{:private true} href[link]
+	(get (get link :attrs) :href))
+
+(defn detail-earls[]
+  (map (fn[link] (href link))
+    (filter (fn[link] (has-class? link "cellMainLink")) (links earl))))
 
 (defn detail[name]
 	(links (str earl name)))
