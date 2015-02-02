@@ -38,7 +38,7 @@
 (defn ^{:private true} href[link]
 	(get (get link :attrs) :href))
 
-(defn detail-earls[]
+(defn ^{:private true} detail-earls[]
   (map (fn[link] (href link))
     (filter (fn[link] (has-class? link "cellMainLink")) (links earl))))
 
@@ -53,3 +53,6 @@
   (let [link (imdb-link url)]
     (first (re-find (re-matcher #"(tt[0-9]+)" link)))))
 	
+(defn detail-ids[]
+  (map imdb-id (detail-earls)))
+
