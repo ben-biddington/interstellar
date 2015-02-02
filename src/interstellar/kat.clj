@@ -34,6 +34,7 @@
 	(= name (get (get element :attrs) :class)))
 
 (def ^{:private true} earl "http://kickass.so")
+(def ^{:private true} movies-earl (str earl "/movies"))
 
 (defn ^{:private true} href[link]
 	(get (get link :attrs) :href))
