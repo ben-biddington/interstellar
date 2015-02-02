@@ -11,16 +11,6 @@
 
 (deftest ^:integration reading-web-pages
 
-  (testing "Select all links like this"
-    (let [result (links earl)]
-      (is (< 0 (count result)))
-      ))
-
-  (testing "Select all links with css class by filtering like this"
-    (let [result (filter (fn [e] (has-class? e "cellMainLink")) (links earl))]
-      (is (< 0 (count result)))
-      ))
-
   (testing "Find an imdb link like this"
     (let [result (imdb-link "/wild-card-2015-hdrip-xvid-juggs-etrg-t10146153.html")]
       (is (.contains result "imdb.com"))

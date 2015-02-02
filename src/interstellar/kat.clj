@@ -37,7 +37,7 @@
 (defn has-class?[element, name]
 	(= name (get (get element :attrs) :class)))
 
-(def earl "http://kickass.so")
+(def ^{:private true} earl "http://kickass.so")
 
 (defn detail[name]
 	(links (str earl name)))

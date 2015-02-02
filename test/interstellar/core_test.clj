@@ -1,7 +1,12 @@
 (ns interstellar.core-test
   (:require [clojure.test :refer :all]
-            [interstellar.core :refer :all]))
+            [interstellar.kat :refer :all]
+            [interstellar.imdb :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
+(defn top[]
+	
+  )
+
+(deftest end-to-end-examples
+  (testing "can find the rating of the first item on the screen"
     (is (= 1 1))))
