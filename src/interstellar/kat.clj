@@ -34,14 +34,14 @@
 	(= name (get (get element :attrs) :class)))
 
 (def ^{:private true} earl "http://kickass.so")
-(def ^{:private true} movies-earl (str earl "/movies"))
+(def ^{:private true} movies-earl (str earl "/movies/"))
 
 (defn ^{:private true} href[link]
 	(get (get link :attrs) :href))
 
 (defn ^{:private true} detail-earls[]
   (map (fn[link] (href link))
-    (filter (fn[link] (has-class? link "cellMainLink")) (links movie-earls))))
+    (filter (fn[link] (has-class? link "cellMainLink")) (links movies-earl))))
 
 (defn detail[name]
 	(links (str earl name)))
