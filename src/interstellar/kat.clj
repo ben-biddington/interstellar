@@ -41,7 +41,7 @@
 
 (defn ^{:private true} detail-earls[]
   (map (fn[link] (href link))
-    (filter (fn[link] (has-class? link "cellMainLink")) (links earl))))
+    (filter (fn[link] (has-class? link "cellMainLink")) (links movie-earls))))
 
 (defn detail[name]
 	(links (str earl name)))
