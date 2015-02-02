@@ -48,6 +48,11 @@
   (let [link (filter (fn [e] (has-href-matching? e "imdb")) (detail url))]
      (get (get (first link) :attrs) :href)))
 	
+(defn imdb-id[url]
+  (let [link (imdb-link url)]
+    (first (re-find (re-matcher #"(tt[0-9]+)" link)))
+    ))
+	
 (deftest ^:integration reading-web-pages
 
   (testing "Select all links like this"
@@ -62,6 +67,11 @@
 
   (testing "Find an imdb link like this"
     (let [result (imdb-link "/wild-card-2015-hdrip-xvid-juggs-etrg-t10146153.html")]
-      (is (.contains result "imdb.com" ))
+      (is (.contains result "imdb.com"))
+      ))
+
+  (testing "Find an imdb identifier like this"
+    (let [result (imdb-id "/wild-card-2015-hdrip-xvid-juggs-etrg-t10146153.html")]
+      (is (= "tt2231253" result))
       ))
 )
