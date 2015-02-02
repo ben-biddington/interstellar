@@ -1,32 +1,9 @@
 (ns interstellar.imdb-test
   (:require [clojure.test :refer :all]
-            [interstellar.core :refer :all]
+            [interstellar.imdb :refer :all]
 	    [org.httpkit.client :as http]
 	    [clojure.data.json :as json]
 	    ))
-
-(def debug false)
-
-(def earl "http://www.omdbapi.com" )
-
-(defstruct fillum :title :metascore :score)
-
-(defn omdb-query [opts]
-	(let [{:keys [status headers body error]} @(http/get earl {:query-params opts})]
-		(let [jsontext (json/read-str body :key-fn keyword)] 
-
-			(if debug (println body))
-
-			(struct fillum (get jsontext :Title) (Integer/parseInt(get jsontext :Metascore)) (Double/parseDouble(get jsontext :imdbRating))))))
-
-(defn imdb-find [name]
-	(omdb-query {:t name}))
-
-(defn imdb-find-by-id [id]
-	(omdb-query {:i id}))
-
-(defn imdb-find-multi-by-id 
-	([& ids](pmap imdb-find-by-id ids)))
 
 (deftest finding-imdb-results
   (testing "can, for example, find robocop by name"
