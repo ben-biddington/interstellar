@@ -48,6 +48,5 @@
 	
 (defn imdb-id[url]
   (let [link (imdb-link url)]
-    (first (re-find (re-matcher #"(tt[0-9]+)" link)))
-    ))
+    (first (re-find (re-matcher #"(tt[0-9]+)" link)))))
 	
