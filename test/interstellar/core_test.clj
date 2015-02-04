@@ -15,8 +15,8 @@
     (let [result (top)]
       (println result)))
 
-  (testing "can for example, get the top 10 in the list"
-    (let [result (top)]
-      (println (title-find 20))))
-
+  (testing "can for example, get the top 25 in the list"
+    (let [result (title-find 25)]
+      (println result)
+      (is (= 25 (count result)))))
       )

@@ -1,8 +1,7 @@
 (ns interstellar.disk-cache-test
   (:require 
    [clojure.test :refer :all]
-   [interstellar.disk-cache :as disk-cache])
-)
+   [interstellar.disk-cache :as disk-cache]))
 
 (def cache-file ".tmp")
 
