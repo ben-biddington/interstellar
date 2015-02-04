@@ -11,7 +11,8 @@
   (title-find 1))
 
 (defn print-list[ratings]
-  (doseq [rating ratings] (println (str (get rating :title) ", score: " (get rating :score) ", metascore: " (get rating :metascore)))))
+  (doseq [rating ratings] 
+    (println (str (get rating :title) ", score: " (get rating :score) ", metascore: " (get rating :metascore)))))
 
 (deftest end-to-end-examples
   (testing "can find the rating of the first item on the screen and print it here"
