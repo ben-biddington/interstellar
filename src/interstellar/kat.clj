@@ -12,39 +12,36 @@
     (tagsoup/parser zip))))
 
 (defn to-earl[text]
-	(URL. text))
+ (URL. text))
 
 (defn browser-get[earl,selector]
-	(select (html-resource (to-earl earl) {:parser gzip-html-parser }) [selector]))
-
-(defn title[earl]
-	(browser-get earl :title))
+  (select (html-resource (to-earl earl) {:parser gzip-html-parser }) [selector]))
 
 (defn body[earl]
-	(browser-get earl :body))
+  (browser-get earl :body))
 
 (defn links[earl]
-	(browser-get earl :a))
+  (browser-get earl :a))
 
 (defn has-href-matching?[element, name]
   (let [href (get (get element :attrs) :href)]
     (if (nil? href) nil (= true (.contains href name)))))
 
 (defn has-class?[element, name]
-	(= name (get (get element :attrs) :class)))
+  (= name (get (get element :attrs) :class)))
 
 (def ^{:private true} earl "http://kickass.so")
 (def ^{:private true} movies-earl (str earl "/movies/"))
 
 (defn ^{:private true} href[link]
-	(get (get link :attrs) :href))
+  (get (get link :attrs) :href))
 
 (defn ^{:private true} detail-earls[]
   (map (fn[link] (href link))
     (filter (fn[link] (has-class? link "cellMainLink")) (links movies-earl))))
 
 (defn detail[name]
-	(links (str earl name)))
+  (links (str earl name)))
 
 (defn imdb-link[url]
   (let [link (filter (fn [e] (has-href-matching? e "imdb")) (detail url))]
