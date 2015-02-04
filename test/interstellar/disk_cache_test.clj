@@ -11,9 +11,11 @@
   )
 
 
-(deftest end-to-end-examples
-  (testing "can cache something on disk"
-    (= nil (cache/lookup C "xxx"))
-    )
+(deftest some-examples
+  (testing "Missing item is nil"
+    (is (= nil (cache/lookup C "xxx"))))
 
-      )
+  (testing "Can put an item in and see it there"
+    (let [new-cache (cache/miss C "A" "value A")]
+      (is (= "value A" (cache/lookup new-cache "A")))))
+  )
