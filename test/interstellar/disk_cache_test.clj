@@ -16,11 +16,10 @@
   )
 
 (defn save-map[map filename]
-  (binding [*print-dup* true]
-    (spit filename map)))
+  (spit filename map))
 
 (defn read-map[filename]
-    (read-string(slurp filename)))
+  (read-string(slurp filename)))
 
 (deftest how-to-write-a-hashmap-to-a-file-on-disk
   (testing "Can write a hash to disk and read it back"
