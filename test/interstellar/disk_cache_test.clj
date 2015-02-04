@@ -24,7 +24,7 @@
     (read-string(slurp filename))))
 
 (deftest how-to-write-a-hashmap-to-a-file-on-disk
-  (testing "Can write a has to disk and read it back"
+  (testing "Can write a hash to disk and read it back"
     (let [filename ".tmp"]
       (save-map (hash-map :a :value_a, :b :value_b) filename)
       (let [loaded-map (read-map filename)]
