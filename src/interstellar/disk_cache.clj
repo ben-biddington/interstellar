@@ -1,7 +1,8 @@
-(ns interstellar.disk-cache)
+(ns interstellar.disk-cache
+  (:refer-clojure :exclude [read]))
 
-(defn save-map[map filename]
+(defn save[map filename]
   (spit filename map))
 
-(defn read-map[filename]
+(defn read[filename]
   (read-string(slurp filename)))
