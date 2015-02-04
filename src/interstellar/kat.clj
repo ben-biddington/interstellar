@@ -6,28 +6,28 @@
   (:require [net.cgrand.tagsoup :as tagsoup])
   (:require [net.cgrand.xml :as xml]))
 
-(defn gzip-html-parser [stream]
+(defn ^{:private true} gzip-html-parser [stream]
   (with-open [^java.io.Closeable stream stream]
     (let [zip (GZIPInputStream. stream)]
     (tagsoup/parser zip))))
 
-(defn to-earl[text]
+(defn ^{:private true} to-earl[text]
  (URL. text))
 
-(defn browser-get[earl,selector]
+(defn ^{:private true} browser-get[earl,selector]
   (select (html-resource (to-earl earl) {:parser gzip-html-parser }) [selector]))
 
-(defn body[earl]
+(defn ^{:private true} body[earl]
   (browser-get earl :body))
 
-(defn links[earl]
+(defn ^{:private true} links[earl]
   (browser-get earl :a))
 
-(defn has-href-matching?[element, name]
+(defn ^{:private true} has-href-matching?[element, name]
   (let [href (get (get element :attrs) :href)]
     (if (nil? href) nil (= true (.contains href name)))))
 
-(defn has-class?[element, name]
+(defn ^{:private true} has-class?[element, name]
   (= name (get (get element :attrs) :class)))
 
 (def ^{:private true} earl "http://kickass.so")
@@ -40,7 +40,7 @@
   (map (fn[link] (href link))
     (filter (fn[link] (has-class? link "cellMainLink")) (links movies-earl))))
 
-(defn detail[name]
+(defn ^{:private true} detail[name]
   (links (str earl name)))
 
 (defn imdb-link[url]
