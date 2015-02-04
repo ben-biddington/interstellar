@@ -4,12 +4,7 @@
             [clojure.core.cache :as cache])
   )
 
- (def C (cache/basic-cache-factory {}))
-
- (defn add-to-cache[key,object]
-  
-  )
-
+(def C (cache/basic-cache-factory {}))
 
 (deftest some-examples
   (testing "Missing item is nil"
