@@ -21,7 +21,7 @@
 (defn ^{:private true} to-earl[text] (URL. text))
 
 (defn ^{:private true} browser-get[earl, selector]
-  (select (html-resource (to-earl earl) {:parser gzip-html-parser }) [selector]))
+  (select (html-resource (to-earl earl) {:parser gzip-html-parser, :headers {"Keep-Alive" 0}}) [selector]))
 
 (defn ^{:private true} body[earl] (browser-get earl :body))
 (defn ^{:private true} links[earl] 
@@ -39,8 +39,7 @@
   ^{:private true}   
   (concat
    (links (movies-earl-page 1)) 
-   (links (movies-earl-page 2)) 
-   (links (movies-earl-page 3))))
+   (links (movies-earl-page 2))))
 
 (defn ^{:private true} detail-earls[]
   (map (fn[link] (href link))
