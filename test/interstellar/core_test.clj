@@ -5,7 +5,7 @@
 
 (defn title-find[n]
   (let [earls (detail-ids)]
-     (pmap imdb-find-by-id (take n earls))))
+    (pmap imdb-find-by-id (take n earls))))
 
 (defn top[]
   (title-find 1))
@@ -21,8 +21,8 @@
       (is (= 1 (count result)))))
 
   (testing "can for example, get the top 25 in the list"
-    (let [result (title-find 25)]
+    (let [result (title-find 30)]
       (print-list result)
-      (is (= 25 (count result)))))
+      (is (= 30 (count result)))))
       
       )
