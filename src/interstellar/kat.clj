@@ -8,6 +8,7 @@
 
 (def ^{:private true} earl "http://kickass.so")
 (def ^{:private true} movies-earl (str earl "/movies/"))
+(defn ^{:private true} movies-earl-page[n] (str movies-earl n))
 
 (defn ^{:private true} gzip-html-parser [stream]
   (with-open [^java.io.Closeable stream stream]
@@ -29,8 +30,7 @@
 (defn ^{:private true} has-class?[element, name] (= name (get (get element :attrs) :class)))
 (defn ^{:private true} href[link] (get (get link :attrs) :href))
 (defn ^{:private true} find-links[] 
-  (links movies-earl)
-)
+  (links movies-earl))
 
 (defn ^{:private true} detail-earls[]
   (map (fn[link] (href link))
