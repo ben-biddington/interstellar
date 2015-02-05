@@ -3,12 +3,9 @@
             [interstellar.kat :refer :all]
             [interstellar.imdb :refer :all]))
 
-(defn filter-by-rating-above[item, limit]
-  (fn[item] true))
-
 (defn title-find[n]
   (let [earls (detail-ids)]
-    (filter (filter-by-rating-above 80) (pmap imdb-find-by-id (take n earls)))))
+    (pmap imdb-find-by-id (take n earls))))
 
 (defn top[]
   (title-find 1))
