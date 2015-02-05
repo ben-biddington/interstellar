@@ -30,7 +30,7 @@
 (defn ^{:private true} has-class?[element, name] (= name (get (get element :attrs) :class)))
 (defn ^{:private true} href[link] (get (get link :attrs) :href))
 (defn ^{:private true} find-links[] 
-  (links movies-earl))
+  (links (movies-earl-page 1)))
 
 (defn ^{:private true} detail-earls[]
   (map (fn[link] (href link))
