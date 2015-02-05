@@ -2,14 +2,14 @@
   (:require
    [clojure.xml :as xml]))
 
-(defn rss[earl]
+(defn ^{:private true} rss[earl]
   (xml/parse earl))
 
-(defn rss-links[earl]
+(defn ^{:private true} rss-links[earl]
   (let [rss-feed (rss earl)]
      (for [n (xml-seq rss-feed) :when (= :link (:tag n))] (first (:content n)))))
 
-(defn kat-rss-links-page[n]
+(defn ^{:private true} kat-rss-links-page[n]
   (drop 1 (rss-links (str "http://kickass.so/movies/" n "/?rss=true&field=seeders&sorder=desc"))))
 
 (defn kat-rss-links
