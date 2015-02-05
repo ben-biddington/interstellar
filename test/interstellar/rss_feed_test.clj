@@ -5,13 +5,16 @@
 	    ))
 
 (defn rss[earl]
-  (xml/parse earl)
-)
+  (xml/parse earl))
+
 
 
 (deftest finding-imdb-results
   (testing "can read rss"
     (let [rss-feed (rss "http://kickass.so/movies/2/?rss=true")]
-      (println (for [n (xml-seq rss-feed) :when (= :item (:tag n))] (:content n)))))
+      (let [links (for [n (xml-seq rss-feed) :when (= :link (:tag n))] (:content n))]
+        (println "Thesea are the links, the first one needs to go though: ")
+(println links)
+        )))
   )
 
