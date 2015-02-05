@@ -28,10 +28,13 @@
 
 (defn ^{:private true} has-class?[element, name] (= name (get (get element :attrs) :class)))
 (defn ^{:private true} href[link] (get (get link :attrs) :href))
+(defn ^{:private true} find-links[] 
+  (links movies-earl)
+)
 
 (defn ^{:private true} detail-earls[]
   (map (fn[link] (href link))
-    (filter (fn[link] (has-class? link "cellMainLink")) (links movies-earl))))
+    (filter (fn[link] (has-class? link "cellMainLink")) (find-links))))
 
 (defn ^{:private true} detail[name] (links (str earl name)))
 
