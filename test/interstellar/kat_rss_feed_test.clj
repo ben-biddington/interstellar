@@ -1,4 +1,4 @@
-(ns interstellar.rss-feed-test
+(ns interstellar.kat-rss-feed-test
   (:require [clojure.test :refer :all]
 	    [clojure.java.io :as io]
             [interstellar.kat-rss :refer :all]))
