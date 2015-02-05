@@ -1,9 +1,7 @@
 (ns interstellar.kat-rss
-  (:require
-   [clojure.xml :as xml]))
+  (:require [clojure.xml :as xml]))
 
-(defn ^{:private true} rss[earl]
-  (xml/parse earl))
+(defn ^{:private true} rss[earl] (xml/parse earl))
 
 (defn ^{:private true} rss-links[earl]
   (let [rss-feed (rss earl)]
