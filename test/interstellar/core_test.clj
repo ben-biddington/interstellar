@@ -7,12 +7,28 @@
   (let [earls (detail-ids)]
     (pmap imdb-find-by-id (take n earls))))
 
+(defn as-double[text]
+  (try
+    (Double/parseDouble text)
+    (catch Exception e 0.0)))
+
 (defn print-list[ratings]
   (doseq [rating ratings] 
     (println (str (get rating :title) ", score: " (get rating :score) ", metascore: " (get rating :metascore)))))
 
+(defn where-score-greater-than[minimum]
+  (fn [item] 
+    (let [actual (as-double (get item :score))]
+      (< minimum actual))))
+
 (deftest end-to-end-examples
   (testing "can for example, get the top 30"
     (let [result (title-find 30)]
-      (is (= 30 (count result))))))
+      (is (= 30 (count result)))))
+
+  (testing "can filter by score (imdb rating)"
+    (let [result (filter (where-score-greater-than 7.5) (title-find 30))]
+      (println "The following titles have score above 7.5 on IMDB:")
+      (print-list result)))
+  )
 
