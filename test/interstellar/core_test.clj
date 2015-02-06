@@ -5,11 +5,6 @@
 
 (defn title-find[n] (pmap imdb-find-by-id (take n (distinct (detail-ids)))))
 
-(defn as-double[text]
-  (try
-    (Double/parseDouble text)
-    (catch Exception e 0.0)))
-
 (defn print-list[ratings]
   (doseq [rating ratings] 
     (println (str (get rating :title) ", score: " (get rating :score) ", metascore: " (get rating :metascore)))))
@@ -20,8 +15,7 @@
 
 (defn where-score-greater-than[minimum]
   (fn [item] 
-    (let [actual (as-double (get item :score))]
-      (< minimum actual)))) 
+    (< minimum (get item :score)))) 
 
 (deftest end-to-end-examples
   (testing "can for example, get the top 30"

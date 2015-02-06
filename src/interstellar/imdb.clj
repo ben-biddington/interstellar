@@ -7,10 +7,20 @@
 
 (defstruct fillum :title :metascore :score)
 
-(defn omdb-query [opts]
+(defn ^{:private true} as-double[text]
+  (try
+    (Double/parseDouble text)
+    (catch Exception e 0.0)))
+
+(defn ^{:private true} as-int[text]
+  (try
+    (Integer/parseInt text)
+    (catch Exception e 0)))
+
+(defn ^{:private true} omdb-query [opts]
   (let [{:keys [status headers body error]} @(http/get earl {:query-params opts :headers {"User-Agent" "ben.biddington@gmail.com"}})]
     (let [jsontext (json/read-str body :key-fn keyword)] 
-      (struct fillum (get jsontext :Title) (get jsontext :Metascore) (get jsontext :imdbRating)))))
+      (struct fillum (get jsontext :Title) (as-int (get jsontext :Metascore)) (as-double (get jsontext :imdbRating))))))
 
 (defn imdb-find [name]
   (omdb-query {:t name}))
