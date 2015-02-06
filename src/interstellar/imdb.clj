@@ -27,7 +27,7 @@
 
 (defn imdb-find-by-id [id]
   (if (nil? id)
-    (struct fillum "Unable to find because no id was provided" 0 0)
+    (struct fillum "Unable to find because no id was provided" 0 0.0)
     (omdb-query {:i id})))
 
 (defn imdb-find-multi-by-id 
