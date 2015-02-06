@@ -25,7 +25,7 @@
   (testing "can filter by score (imdb rating)"
     (let [expected 100 score-min 8.0]
       (let [result (filter (where-score-greater-than-or-equal-to score-min) (title-find expected))]
-        (println (str "The following <" (count result) "/" expected "> titles have score above " score-min " on IMDB:\n"))
+        (println (str "Based on asking for <" expected "> items from kickass.so, the following <" (count result) "> titles have score above " score-min " on IMDB:\n"))
         (prn-short result))))
   )
 
