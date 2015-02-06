@@ -7,7 +7,7 @@
   (:require [net.cgrand.xml :as xml])
   (:require [interstellar.kat-rss :refer :all]))
 
-(def  ^{:private true} debug false)
+(def  ^{:private true} debug (=(System/getenv "LOUD") "ON"))
 (defn ^{:private true} log[text] (when debug (println text)))
 (def  ^{:private true} earl "http://kickass.so")
 
@@ -22,7 +22,6 @@
   (select (html-resource (to-earl earl) {:parser gzip-html-parser}) [selector]))
 
 (defn ^{:private true} links[earl] 
-  (log (str "Fetching links from <" earl ">"))
   (browser-get earl :a))
 
 (defn ^{:private true} has-class?  [element, name] (= name (get-in element [:attrs :class])))
@@ -47,5 +46,6 @@
 	
 (defn detail-ids[]
   (let [earls (detail-earls)]
+    (log (str "Found <" (count earls) "> earls"))
     (pmap imdb-id earls)))
 
