@@ -19,7 +19,7 @@
 (defn ^{:private true} to-earl[text] (URL. text))
 
 (defn ^{:private true} browser-get[earl, selector]
-  (select (html-resource (to-earl earl) {:parser gzip-html-parser, :headers {"Keep-Alive" 0}}) [selector]))
+  (select (html-resource (to-earl earl) {:parser gzip-html-parser}) [selector]))
 
 (defn ^{:private true} links[earl] 
   (log (str "Fetching links from <" earl ">"))
