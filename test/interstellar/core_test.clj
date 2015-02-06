@@ -3,9 +3,7 @@
             [interstellar.kat :refer :all]
             [interstellar.imdb :refer :all]))
 
-(defn title-find[n]
-  (let [earls (detail-ids)]
-    (pmap imdb-find-by-id (take n earls))))
+(defn title-find[n] (pmap imdb-find-by-id (take n (detail-ids)))))
 
 (defn as-double[text]
   (try
@@ -19,7 +17,7 @@
 (defn where-score-greater-than[minimum]
   (fn [item] 
     (let [actual (as-double (get item :score))]
-      (< minimum actual))))
+      (< minimum actual)))) 
 
 (deftest end-to-end-examples
   (testing "can for example, get the top 30"
@@ -27,7 +25,7 @@
       (is (= 30 (count result)))))
 
   (testing "can filter by score (imdb rating)"
-    (let [result (filter (where-score-greater-than 7.5) (title-find 30))]
+    (let [result (filter (where-score-greater-than 7.9) (title-find 50))]
       (println "The following titles have score above 7.5 on IMDB:")
       (print-list result)))
   )

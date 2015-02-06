@@ -27,7 +27,7 @@
 
 (defn ^{:private true} has-class?  [element, name] (= name (get-in element [:attrs :class])))
 (defn ^{:private true} href        [link]          (get-in link [:attrs :href]))
-(defn ^{:private true} detail-earls[]              (kat-rss-links 1))
+(defn ^{:private true} detail-earls[]              (kat-rss-links 5))
 
 (defn ^{:private true} has-href-matching?[element, name]
   (let [href (href element)]
@@ -41,7 +41,9 @@
 	
 (defn imdb-id[url]
   (let [link (imdb-link url)]
-    (first (re-find (re-matcher #"(tt[0-9]+)" link)))))
+    (if (nil? link)
+      nil
+      (first (re-find (re-matcher #"(tt[0-9]+)" link))))))
 	
 (defn detail-ids[]
   (let [earls (detail-earls)]
