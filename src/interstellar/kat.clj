@@ -25,17 +25,19 @@
   (log (str "Fetching links from <" earl ">"))
   (browser-get earl :a))
 
-(defn ^{:private true} has-href-matching?[element, name]
-  (let [href (get (get element :attrs) :href)]
-    (if (nil? href) nil (= true (.contains href name)))))
+(defn ^{:private true} has-class?  [element, name] (= name (get-in element [:attrs :class])))
+(defn ^{:private true} href        [link]          (get-in link [:attrs :href]))
+(defn ^{:private true} detail-earls[]              (kat-rss-links 1))
 
-(defn ^{:private true} has-class?[element, name] (= name (get (get element :attrs) :class)))
-(defn ^{:private true} href[link] (get (get link :attrs) :href))
-(defn ^{:private true} detail-earls[] (kat-rss-links 1))
+(defn ^{:private true} has-href-matching?[element, name]
+  (let [href (href element)]
+    (if (nil? href) false (.contains href name))))
+
+(defn ^{:private true} links-with-href-matching[earl,expected] 
+  (filter (fn [e] (has-href-matching? e expected)) (links earl)))
 
 (defn imdb-link[url]
-  (let [link (filter (fn [e] (has-href-matching? e "imdb")) (links url))]
-     (get (get (first link) :attrs) :href)))
+  (href (first (links-with-href-matching url "imdb"))))
 	
 (defn imdb-id[url]
   (let [link (imdb-link url)]
