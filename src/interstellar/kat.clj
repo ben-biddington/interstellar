@@ -8,30 +8,28 @@
   (:require [interstellar.kat-rss :refer :all]))
 
 (def  ^{:private true} debug (=(System/getenv "LOUD") "ON"))
-(defn ^{:private true} log[text] (when debug (println text)))
+(defn- log[text] (when debug (println text)))
 
-(defn ^{:private true} gzip-html-parser [stream]
+(defn- gzip-html-parser [stream]
   (with-open [^java.io.Closeable stream stream]
     (let [zip (GZIPInputStream. stream)]
     (tagsoup/parser zip))))
 
-(defn ^{:private true} to-earl[text] (URL. text))
+(defn- to-earl[text] (URL. text))
 
-(defn ^{:private true} browser-get[earl, selector]
+(defn- browser-get[earl, selector]
   (select (html-resource (to-earl earl) {:parser gzip-html-parser}) [selector]))
 
-(defn ^{:private true} links[earl] 
-  (browser-get earl :a))
+(defn- links        [earl] (browser-get earl :a))
+(defn- has-class?   [element, name] (= name (get-in element [:attrs :class])))
+(defn- href         [link]          (get-in link [:attrs :href]))
+(defn- detail-earls []              (kat-rss-links 5))
 
-(defn ^{:private true} has-class?  [element, name] (= name (get-in element [:attrs :class])))
-(defn ^{:private true} href        [link]          (get-in link [:attrs :href]))
-(defn ^{:private true} detail-earls[]              (kat-rss-links 5))
-
-(defn ^{:private true} has-href-matching?[element, name]
+(defn- has-href-matching?[element, name]
   (let [href (href element)]
     (if (nil? href) false (.contains href name))))
 
-(defn ^{:private true} links-with-href-matching[earl,expected] 
+(defn- links-with-href-matching[earl,expected] 
   (filter (fn [e] (has-href-matching? e expected)) (links earl)))
 
 (defn imdb-link[url]
