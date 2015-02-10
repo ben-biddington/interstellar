@@ -1,8 +1,12 @@
 (ns interstellar.lang-test
   (:require [clojure.test :refer :all]))
 
+(def take-5 (fn[seq] (take 5 seq)))
+
 (defn example[seq]
-  (take 5 (distinct seq)))
+  (take 5 (distinct seq))
+  (-> seq distinct take-5)
+  )
 
 (deftest language-examples
   (testing "that arrow thing"
