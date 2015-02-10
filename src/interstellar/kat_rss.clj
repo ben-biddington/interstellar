@@ -3,7 +3,7 @@
 
 (defn- rss[earl] (xml/parse earl))
 
-(def host "http://kickass.to")
+(def ^{:private true} host "http://kickass.to")
 
 (defn- rss-links[earl]
   (let [rss-feed (rss earl)]
