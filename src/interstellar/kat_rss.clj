@@ -7,7 +7,15 @@
   (let [rss-feed (rss earl)]
      (for [n (xml-seq rss-feed) :when (= :link (:tag n))] (first (:content n)))))
 
+(def kat-request-count (atom {:count 0}))
+
+(defn- increment-count[]
+  (swap! kat-request-count
+      (fn[current-state] 
+        (merge-with + current-state {:count 1}))))
+
 (defn ^{:private true} kat-rss-links-page[n]
+  (increment-count)
   (drop 1 (rss-links (str "http://kickass.so/movies/" n "/?rss=true&field=seeders&sorder=desc"))))
 
 (defn kat-rss-links

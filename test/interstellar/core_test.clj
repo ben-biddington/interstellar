@@ -1,6 +1,7 @@
 (ns interstellar.core-test
   (:require [clojure.test :refer :all]
             [interstellar.kat :refer :all]
+            [interstellar.kat-rss :refer :all]
             [interstellar.imdb :refer :all]))
 
 (defn title-find[n] (reverse (sort-by :score (pmap imdb-find-by-id (take n (distinct (detail-ids)))))))
@@ -26,6 +27,7 @@
     (let [expected 100 score-min 8.0]
       (let [result (filter (where-score-greater-than-or-equal-to score-min) (title-find expected))]
         (println (str "Based on asking for <" expected "> items from kickass.so, the following <" (count result) "> titles have score above " score-min " on IMDB:\n"))
-        (prn-short result))))
+        (prn-short result)
+        (println (str "And that required <" kat-request-count "> web requests")))))
   )
 
