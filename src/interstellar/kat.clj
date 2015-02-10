@@ -9,7 +9,6 @@
 
 (def  ^{:private true} debug (=(System/getenv "LOUD") "ON"))
 (defn ^{:private true} log[text] (when debug (println text)))
-(def  ^{:private true} earl "http://kickass.so")
 
 (defn ^{:private true} gzip-html-parser [stream]
   (with-open [^java.io.Closeable stream stream]
