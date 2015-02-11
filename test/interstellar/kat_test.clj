@@ -8,12 +8,11 @@
   (:require [clojure.test :refer :all]
             [interstellar.kat :refer :all]))
 
-
 (deftest ^:integration reading-web-pages
   (testing "Find an imdb link like this"
-    (let [result (imdb-link "http://kickass.so/wild-card-2015-hdrip-xvid-juggs-etrg-t10146153.html")]
+    (let [result (imdb-link "http://kickass.to/wild-card-2015-hdrip-xvid-juggs-etrg-t10146153.html")]
       (is (.contains result "imdb.com"))))
 
   (testing "Find an imdb identifier like this"
-    (let [result (imdb-id "http://kickass.so/wild-card-2015-hdrip-xvid-juggs-etrg-t10146153.html")]
+    (let [result (imdb-id "http://kickass.to/wild-card-2015-hdrip-xvid-juggs-etrg-t10146153.html")]
       (is (= "tt2231253" result)))))
