@@ -2,8 +2,7 @@
   (:require [clojure.test :refer :all]
             [interstellar.imdb :refer :all]
 	    [org.httpkit.client :as http]
-	    [clojure.data.json :as json]
-	    ))
+	    [clojure.data.json :as json]))
 
 (deftest finding-imdb-results
   (testing "can, for example, find robocop by name"
