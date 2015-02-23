@@ -17,8 +17,15 @@
 
 (defn- to-earl[text] (URL. text))
 
+(defn- get-gzip[earl]
+  (try
+    (html-resource (to-earl earl) {:parser gzip-html-parser})
+    (catch java.io.FileNotFoundException e {}) ;; Sometimes the urls are missing and return 404
+  )
+)
+
 (defn- browser-get[earl, selector]
-  (select (html-resource (to-earl earl) {:parser gzip-html-parser}) [selector]))
+  (select (get-gzip earl) [selector]))
 
 (defn- links        [earl] (browser-get earl :a))
 (defn- has-class?   [element, name] (= name (get-in element [:attrs :class])))
