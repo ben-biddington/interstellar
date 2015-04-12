@@ -5,7 +5,7 @@
 
 (def earl "http://www.omdbapi.com" )
 
-(defstruct fillum :title :metascore :score)
+(defstruct fillum :imdb-id :title :metascore :score)
 
 (defn ^{:private true} as-double[text]
   (try
@@ -20,14 +20,14 @@
 (defn ^{:private true} omdb-query [opts]
   (let [{:keys [status headers body error]} @(http/get earl {:query-params opts :headers {"User-Agent" "ben.biddington@gmail.com"}})]
     (let [jsontext (json/read-str body :key-fn keyword)] 
-      (struct fillum (get jsontext :Title) (as-int (get jsontext :Metascore)) (as-double (get jsontext :imdbRating))))))
+      (struct fillum (:i opts) (:Title jsontext) (as-int (:Metascore jsontext)) (as-double (:imdbRating jsontext))))))
 
 (defn imdb-find [name]
   (omdb-query {:t name}))
 
 (defn imdb-find-by-id [id]
   (if (nil? id)
-    (struct fillum "Unable to find because no id was provided" 0 0.0)
+    (struct fillum "unknown" "Unable to find because no id was provided" 0 0.0)
     (omdb-query {:i id})))
 
 (defn imdb-find-multi-by-id 

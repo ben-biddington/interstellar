@@ -65,10 +65,9 @@
 
 (defn- info-for [url] {:imdb-id (imdb-id url) :kat-rating (kat-rating url)})
 
-(defn info []
+(defn kat-info []
   "Gets n pages of info (imdb-id, kat-rating)"
-  (let [earls (detail-earls)]
-    (pmap info-for earls)))
+  (pmap info-for (detail-earls)))
 	
 (defn detail-ids[]
   "Gets n pages of imdb ids"
