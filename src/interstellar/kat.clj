@@ -62,9 +62,15 @@
     (if (nil? link)
       nil
       (first (re-find (re-matcher #"(tt[0-9]+)" link))))))
+
+(defn- info-for [url] {:imdb-id (imdb-id url) :kat-rating (kat-rating url)})
+
+(defn info []
+  "Gets n pages of info (imdb-id, kat-rating)"
+  (let [earls (detail-earls)]
+    (pmap info-for earls)))
 	
 (defn detail-ids[]
-  (let [earls (detail-earls)]
-    (log (str "Found <" (count earls) "> earls"))
-    (pmap imdb-id earls)))
+  "Gets n pages of imdb ids"
+  (let [earls (detail-earls)] (pmap imdb-id earls)))
 
