@@ -9,7 +9,8 @@
   		[http-kit "2.1.16"]
   		[org.clojure/data.json "0.2.5"]
   		[enlive "1.1.5"]
-                [org.clojure/data.xml "0.0.8"]]
+                [org.clojure/data.xml "0.0.8"]
+                [clj-time "0.9.0"]]
   :main ^:skip-aot interstellar.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
