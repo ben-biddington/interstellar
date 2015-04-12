@@ -32,19 +32,29 @@
   (reset! running false)
   (print "\n\n") (flush))  
 
+(defn- p[cli-args]
+  [
+   (if (> (count cli-args) 0) 
+     (Integer/parseInt (first cli-args)) 
+     100)
+   (if (> (count cli-args) 1) 
+     (Double/parseDouble (second cli-args)) 
+     7.5)])
+
 (defn -main [& args]
-  (let [count 100 min-score 7.5]
-    (println (format "Running search with args <%s> (count: %s, minimum imdb score: %s)\n" (if (nil? args) "none" args) count min-score))
+  (let [params (p args)]
+    (let [count (first params) min-score (second params)]
+      (println (format "Running search with args <%s> (will read %s items from kat.ph, and look for a minimum imdb score of %s)\n" (if (nil? args) "none" args) count min-score))
 
-    (start)  
+      (start)  
 
-    (let [timed-result (time-this #(search/basic count min-score))]
-      (finish)
-      (let [result (:result timed-result)]
-        (prn-short result)
-        (println "")
-        ;(println (format "Based on asking for <%s> items from kickass.so, <%s> titles have score above %s on IMDB." count (clojure.core/count result) min-score))
-        (println (str "Required <" (:count @kat-request-count) "> web requests to <kickass.to>"))
-        (println (format "Duration: %ds" (t/in-seconds (:duration timed-result)))))))
+      (let [timed-result (time-this #(search/basic count min-score))]
+        (finish)
+        (let [result (:result timed-result)]
+          (prn-short result)
+          (println "")
+          ;(println (format "Based on asking for <%s> items from kickass.so, <%s> titles have score above %s on IMDB." count (clojure.core/count result) min-score))
+          (println (str "Required <" (:count @kat-request-count) "> web requests to <kickass.to>"))
+          (println (format "Duration: %ds" (t/in-seconds (:duration timed-result))))))))
 
   (System/exit 0))
