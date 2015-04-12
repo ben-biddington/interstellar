@@ -16,16 +16,20 @@
 
 (def ^{:private true} running (atom false))
 (def ^{:private true} pill-count (atom 0))
+(def ^{:private true} started-at (atom nil))
+
+(defn- runtime[] (t/in-seconds (t/interval @started-at (t/now))))
 
 (defn- start[] 
   (reset! running true)
+  (reset! started-at (t/now))
   (future 
     (while @running 
       (do 
         (Thread/sleep 100) 
         (print ".") (swap! pill-count inc)
-        (when (= 0 (mod @pill-count 86))
-          (print "\n"))
+        (when (= 0 (mod @pill-count 50))
+          (print (format " -- [%ss]\n" (runtime))))
         (flush)))))
   
 (defn- finish[] 
