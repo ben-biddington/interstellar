@@ -2,6 +2,7 @@
   (:gen-class)
   (:require 
    [interstellar.search :refer :all :as search]
+   [interstellar.kat :refer :all]
    [interstellar.kat-rss :refer :all]
    [clj-time.core :as t]))
 
@@ -58,7 +59,7 @@
           (prn-short result)
           (println "")
           ;(println (format "Based on asking for <%s> items from kickass.so, <%s> titles have score above %s on IMDB." count (clojure.core/count result) min-score))
-          (println (str "Required <" (:count @kat-request-count) "> web requests to <kickass.to>"))
+          (println (str "Required <" (:count @kat-request-count) "> rss requests to <kickass.to> and <" (str (web-request-count)) "> detail requests (page scrapes)"))
           (println (format "Duration: %ds" (t/in-seconds (:duration timed-result))))))))
 
   (System/exit 0))

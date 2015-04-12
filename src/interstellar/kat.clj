@@ -9,7 +9,9 @@
   (:require [interstellar.kat-rss :refer :all]))
 
 (def  ^{:private true} debug (=(System/getenv "LOUD") "ON"))
+(def  ^{:private true} r-count (atom 0))
 (defn- log[text] (when debug (println text)))
+(defn web-request-count[] @r-count)
 
 (defn- gzip-html-parser [stream]
   (with-open [^java.io.Closeable stream stream]
@@ -20,6 +22,7 @@
 
 (defn- get-gzip[earl]
   (try
+    (swap! r-count inc)
     (html-resource (to-earl earl) {:parser gzip-html-parser})
     (catch java.io.FileNotFoundException e {}) ;; Sometimes the urls are missing and return 404
   )
@@ -31,7 +34,7 @@
 (defn- links        [earl] (browser-get earl :a))
 (defn- spans        [earl] (browser-get earl :span))
 (defn- has-class?   [element, name] (= name (get-in element [:attrs :class])))
-(defn- href         [link]          (get-in link [:attrs :href]))
+(defn- href         [link]          (-> link :attrs :href))
 (defn- detail-earls []              (kat-rss-links 5))
 
 (defn- has-href-matching?[element, name]
