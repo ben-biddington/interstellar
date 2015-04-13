@@ -1,4 +1,5 @@
 (ns interstellar.kat
+  (:refer-clojure :exclude [get set])
   (:use net.cgrand.enlive-html)
   (:import java.net.URL) 
   (:import java.lang.String)
@@ -14,14 +15,9 @@
 
 (defn- log[text] (when debug (println text)))
 (defn web-request-count[] (net/request-count))
+(defn- get[earl] (net/nice-get-gzip earl))
 
-(defn- gzip-html-parser [stream]
-  (with-open [^java.io.Closeable stream stream]
-    (let [zip (GZIPInputStream. stream)]
-    (jsoup/parser zip))))
-
-(defn- browser-get[earl, selector]
-  (select (net/get-gzip earl) [selector]))
+(defn- browser-get[earl, selector] (select (get earl) [selector]))
 
 (defn- links        [earl] (browser-get earl :a))
 (defn- spans        [earl] (browser-get earl :span))
