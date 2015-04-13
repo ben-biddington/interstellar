@@ -7,20 +7,18 @@
   (:require [net.cgrand.jsoup :as jsoup])
   (:require [net.cgrand.xml :as xml]))
 
-(def  ^{:private true} r-count (atom 0))
+(def ^{:private true} r-count (atom 0))
 (defn- to-earl[text] (URL. text))
 (defn request-count[] @r-count)
+(defn zero[] (reset! r-count 0))
 
 (defn- gzip-html-parser [stream]
   (with-open [^java.io.Closeable stream stream]
-    (let [zip (GZIPInputStream. stream)]
-    (jsoup/parser zip))))
+    (jsoup/parser (GZIPInputStream. stream))))
 
 (defn get-gzip[earl]
   "Fetch <earl> using gzip parser"
   (try
     (swap! r-count inc)
     (html-resource (to-earl earl) {:parser gzip-html-parser})
-    (catch java.io.FileNotFoundException e {}) ;; Sometimes the urls are missing and return 404
-  )
-)
+    (catch java.io.FileNotFoundException e {}))) ;; Sometimes the urls are missing and return 404))
