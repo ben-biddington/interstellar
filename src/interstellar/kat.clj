@@ -6,30 +6,22 @@
   (:require [net.cgrand.tagsoup :as tagsoup])
   (:require [net.cgrand.jsoup :as jsoup])
   (:require [net.cgrand.xml :as xml])
-  (:require [interstellar.kat-rss :refer :all]))
+  (:require [interstellar.kat-rss :refer :all])
+  (:require [interstellar.t-internet :refer :all :as net]))
 
 (def  ^{:private true} debug (=(System/getenv "LOUD") "ON"))
-(def  ^{:private true} r-count (atom 0))
+(def  ^{:private true} request-cache (atom {}))
+
 (defn- log[text] (when debug (println text)))
-(defn web-request-count[] @r-count)
+(defn web-request-count[] (net/request-count))
 
 (defn- gzip-html-parser [stream]
   (with-open [^java.io.Closeable stream stream]
     (let [zip (GZIPInputStream. stream)]
     (jsoup/parser zip))))
 
-(defn- to-earl[text] (URL. text))
-
-(defn- get-gzip[earl]
-  (try
-    (swap! r-count inc)
-    (html-resource (to-earl earl) {:parser gzip-html-parser})
-    (catch java.io.FileNotFoundException e {}) ;; Sometimes the urls are missing and return 404
-  )
-)
-
 (defn- browser-get[earl, selector]
-  (select (get-gzip earl) [selector]))
+  (select (net/get-gzip earl) [selector]))
 
 (defn- links        [earl] (browser-get earl :a))
 (defn- spans        [earl] (browser-get earl :span))
