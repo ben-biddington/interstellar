@@ -1,8 +1,7 @@
 (ns interstellar.internet-test
   (:refer-clojure :exclude [get set])
   (:require [clojure.test :refer :all]
-            [interstellar.t-internet :refer :all :as net]
-            [interstellar.cache :refer :all :as cache]))
+            [interstellar.t-internet :refer :all :as net]))
 
 (deftest that-you-can-fetch-a-resource
   (testing "that it returns a data structure representing the page"
