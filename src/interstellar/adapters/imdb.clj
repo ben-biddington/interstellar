@@ -1,4 +1,4 @@
-(ns interstellar.imdb
+(ns interstellar.adapters.imdb
   (:require 
    [org.httpkit.client :as http]
    [clojure.data.json :as json]))

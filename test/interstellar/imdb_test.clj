@@ -1,6 +1,6 @@
 (ns interstellar.imdb-test
   (:require [clojure.test :refer :all]
-            [interstellar.imdb :refer :all]
+            [interstellar.adapters.imdb :refer :all]
 	    [org.httpkit.client :as http]
 	    [clojure.data.json :as json]))
 

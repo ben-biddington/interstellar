@@ -1,7 +1,7 @@
 (ns interstellar.atoms-test
   (:require [clojure.test :refer :all]
             [interstellar.kat :refer :all]
-            [interstellar.imdb :refer :all]))
+            [interstellar.adapters.imdb :refer :all]))
 
 (def an-atom
   (atom {:count 1}))

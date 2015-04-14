@@ -15,3 +15,4 @@
       (net/nice-get-gzip "http://kickass.to/movies"))
     
     (is (= 1 (net/request-count)) "Expected exactly one request because the result ought to have been cached" )))
+

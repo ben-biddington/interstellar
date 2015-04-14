@@ -1,4 +1,4 @@
-(ns interstellar.disk-cache
+(ns interstellar.adapters.disk-cache
   (:require [clojure.java.io :as io])  
   (:refer-clojure :exclude [read]))
 
