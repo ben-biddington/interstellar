@@ -4,19 +4,28 @@
    [interstellar.search :refer :all :as search]
    [interstellar.kat :refer :all]
    [interstellar.kat-rss :refer :all]
-   [clj-time.core :as t]))
+   [clj-time.core :as t]
+   [clansi.core :refer :all :as c]))
 
 (defn- format-title[t]
   (clojure.pprint/cl-format nil "~75A" t)) ;; "~75,1,1,'.A" to use dots
 
-(defn- prn-short[ratings]
-  (doseq [rating ratings] 
-    (println (format "[%s] -- %s %s" 
+(defn- color[kat-rating]
+  (if (> 8 (:video kat-rating)) :red :green))
+
+(defn- single[rating]
+  (let [a (-> rating :kat-rating :audio) v (-> rating :kat-rating :video)]
+    (format "[%s] -- %s %s" 
       (-> rating :score) 
       (-> rating :title format-title)
-         (format "(A: %s, V: %s)"
-           (-> rating :kat-rating :audio)
-           (-> rating :kat-rating :video))))))
+      (format "(A: %s, V: %s)" a v))))
+
+(defn- prn-short[ratings]
+  (doseq [rating ratings] 
+    (println 
+     (c/style
+      (single rating)
+      (color (:kat-rating rating))))))
 
 (defn- time-this[f]
   (let [start (t/now)]
@@ -67,6 +76,6 @@
           (prn-short result)
           (println "")
           (println (str "Required <" (:count @kat-request-count) "> rss requests to <kickass.to> and <" (str (web-request-count)) "> detail requests (page scrapes)"))
-          (println (format "Duration: %ds" (t/in-seconds (:duration timed-result))))))))
+          (println (format "Duration: %ds\n" (t/in-seconds (:duration timed-result))))))))
 
   (System/exit 0))
