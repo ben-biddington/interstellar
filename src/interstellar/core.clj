@@ -6,9 +6,17 @@
    [interstellar.kat-rss :refer :all]
    [clj-time.core :as t]))
 
+(defn- format-title[t]
+  (clojure.pprint/cl-format nil "~75A" t)) ;; "~75,1,1,'.A" to use dots
+
 (defn- prn-short[ratings]
   (doseq [rating ratings] 
-    (println (format "[%s] (A: %s, V: %s) -- %s " (:score rating) (-> rating :kat-rating :audio) (-> rating :kat-rating :video) (:title rating)))))
+    (println (format "[%s] -- %s %s" 
+      (-> rating :score) 
+      (-> rating :title format-title)
+         (format "(A: %s, V: %s)"
+           (-> rating :kat-rating :audio)
+           (-> rating :kat-rating :video))))))
 
 (defn- time-this[f]
   (let [start (t/now)]
