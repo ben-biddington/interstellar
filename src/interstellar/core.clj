@@ -8,7 +8,7 @@
 
 (defn- prn-short[ratings]
   (doseq [rating ratings] 
-    (println (str " [" (:score rating) "] -- " (:title rating)))))
+    (println (format "[%s] (A: %s, V: %s) -- %s " (:score rating) (-> rating :kat-rating :audio) (-> rating :kat-rating :video) (:title rating)))))
 
 (defn- time-this[f]
   (let [start (t/now)]
