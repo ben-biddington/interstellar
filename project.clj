@@ -14,4 +14,5 @@
                 [clj-time "0.9.0"]]
   :main ^:skip-aot interstellar.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:uberjar {:aot :all}}
+  :eval-in-leiningen true)

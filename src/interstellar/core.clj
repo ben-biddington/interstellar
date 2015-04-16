@@ -18,7 +18,7 @@
     (format "[%s] -- %s %s" 
       (-> rating :score) 
       (-> rating :title format-title)
-      (format "(A: %s, V: %s)" a v))))
+      (format "(A: %s/10, V: %s/10)" a v))))
 
 (defn- prn-short[ratings]
   (doseq [rating ratings] 
@@ -38,6 +38,8 @@
 
 (defn- runtime[] (t/in-seconds (t/interval @started-at (t/now))))
 
+(def pill-line-limit 75)
+
 (defn- start[] 
   (reset! running true)
   (reset! started-at (t/now))
@@ -46,7 +48,7 @@
       (do 
         (Thread/sleep 100) 
         (print ".") (swap! pill-count inc)
-        (when (= 0 (mod @pill-count 50))
+        (when (= 0 (mod @pill-count pill-line-limit))
           (print (format " -- [%ss]\n" (runtime))))
         (flush)))))
   
