@@ -7,6 +7,8 @@
    [clj-time.core :as t]
    [clansi.core :refer :all :as c]))
 
+(def pill-line-limit 75)
+
 (defn- format-title[t]
   (clojure.pprint/cl-format nil "~75A" t)) ;; "~75,1,1,'.A" to use dots
 
@@ -37,8 +39,6 @@
 (def ^{:private true} started-at (atom nil))
 
 (defn- runtime[] (t/in-seconds (t/interval @started-at (t/now))))
-
-(def pill-line-limit 75)
 
 (defn- start[] 
   (reset! running true)
