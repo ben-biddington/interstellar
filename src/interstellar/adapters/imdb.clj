@@ -1,7 +1,8 @@
 (ns interstellar.adapters.imdb
   (:require 
    [org.httpkit.client :as http]
-   [clojure.data.json :as json]))
+   [clojure.data.json :as json]
+   [interstellar.lang :as core]))
 
 (def earl "http://www.omdbapi.com" )
 
@@ -19,6 +20,8 @@
 
 (defn ^{:private true} omdb-query [opts]
   (let [{:keys [status headers body error]} @(http/get earl {:query-params opts :headers {"User-Agent" "ben.biddington@gmail.com"}})]
+    (when-not (nil? error)
+      (core/fail "The request to <%s> with params <%s> failed with an error <%s>" earl opts error))
     (let [jsontext (json/read-str body :key-fn keyword)] 
       (struct fillum (:i opts) (:Title jsontext) (as-int (:Metascore jsontext)) (as-double (:imdbRating jsontext))))))
 
