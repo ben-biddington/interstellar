@@ -14,7 +14,7 @@
     (highest-rating kat-ratings-for-fillum)))
 
 (defn- title-find[n] 
-  (let [info (kat-info)]
+  (let [info (kat-info n)]
     (let [imdb-ids (all-detail-ids info)]
       (let [result (reverse (sort-by :score (pmap imdb-find-by-id (take n (distinct imdb-ids)))))]
         (map #(conj % (find-kat-ratings % info)) result)))))

@@ -23,7 +23,12 @@
 (defn- spans        [earl] (browser-get earl :span))
 (defn- has-class?   [element, name] (= name (get-in element [:attrs :class])))
 (defn- href         [link]          (-> link :attrs :href))
-(defn- detail-earls []              (kat-rss-links 5))
+(defn- detail-earls [n]              
+  (kat-rss-links 
+   (+
+    (if (< 0 (rem n 5)) 1 0)
+    (max 1 (quot n 25))
+   )))
 
 (defn- has-href-matching?[element, name]
   (let [href (href element)]
@@ -61,11 +66,10 @@
 
 (defn- info-for [url] {:imdb-id (imdb-id url) :kat-rating (kat-rating url)})
 
-(defn kat-info []
+(defn kat-info [n]
   "Gets n pages of info (imdb-id, kat-rating)"
-  (pmap info-for (detail-earls)))
+  (pmap info-for (detail-earls n)))
 	
 (defn detail-ids[]
   "Gets n pages of imdb ids"
   (let [earls (detail-earls)] (pmap imdb-id earls)))
-
