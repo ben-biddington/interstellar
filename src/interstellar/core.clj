@@ -1,6 +1,6 @@
 (ns interstellar.core
   (:gen-class)
-  (:refer-clojure :exclude [find contains?])
+  (:refer-clojure :exclude [contains?])
   (:require 
    [interstellar.search :refer :all :as search]
    [interstellar.kat :refer :all]
@@ -68,6 +68,7 @@
   
 (defn- finish[] 
   (reset! running false)
+  (flush)
   (print "\n\n") (flush))  
 
 (defn- p[cli-args]
