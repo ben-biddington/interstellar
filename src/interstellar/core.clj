@@ -25,12 +25,20 @@
       (-> rating :title format-title)
       (format "(A: %s/10, V: %s/10)" a v))))
 
+(defn- legend[]
+  (println "")
+  (println "[" (c/style "-" :white)  "] -- seen")
+  (println "[" (c/style "-" :green)  "] -- good copy")
+  (println "[" (c/style "-" :red)  "] -- poor copy"))
+
 (defn- prn-short[ratings]
   (doseq [rating ratings] 
     (println 
      (c/style
       (single rating)
-      (color rating)))))
+      (color rating))))
+
+  (legend))
 
 (defn- time-this[f]
   (let [start (t/now)]
