@@ -5,6 +5,8 @@
 
 (def ^{:private true} host "http://kickass.to")
 
+(def page-size 25)
+
 (defn- rss-links[earl]
   (let [rss-feed (rss earl)]
      (for [n (xml-seq rss-feed) :when (= :link (:tag n))] (first (:content n)))))

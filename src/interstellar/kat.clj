@@ -23,12 +23,13 @@
 (defn- spans        [earl] (browser-get earl :span))
 (defn- has-class?   [element, name] (= name (get-in element [:attrs :class])))
 (defn- href         [link]          (-> link :attrs :href))
-(defn- detail-earls [n]              
-  (kat-rss-links 
-   (+
-    (if (< 0 (rem n 5)) 1 0)
-    (max 1 (quot n 25))
-   )))
+(defn- detail-earls [n]
+  "Finds <n> detail page urls by querying the rss feed"
+  (let [page-size interstellar.kat-rss/page-size]
+    (kat-rss-links 
+     (+
+      (if (< 0 (rem n page-size)) 1 0)
+      (max 1 (quot n page-size))))))
 
 (defn- has-href-matching?[element, name]
   (let [href (href element)]
