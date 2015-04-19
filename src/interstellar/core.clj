@@ -5,15 +5,18 @@
    [interstellar.kat :refer :all]
    [interstellar.kat-rss :refer :all]
    [clj-time.core :as t]
-   [clansi.core :refer :all :as c]))
+   [clansi.core :refer :all :as c]
+   [interstellar.adapters.ignore :refer :all :as s]))
 
 (def pill-line-limit 75)
 
 (defn- format-title[t]
   (clojure.pprint/cl-format nil "~75A" t)) ;; "~75,1,1,'.A" to use dots
 
-(defn- color[kat-rating]
-  (if (> 8 (:video kat-rating)) :red :green))
+(defn- color[rating]
+  (if (s/seen? (-> rating :title))
+    :white
+    (if (> 8 (-> rating :kat-rating :video)) :red :green)))
 
 (defn- single[rating]
   (let [a (-> rating :kat-rating :audio) v (-> rating :kat-rating :video)]
@@ -27,7 +30,7 @@
     (println 
      (c/style
       (single rating)
-      (color (:kat-rating rating))))))
+      (color rating)))))
 
 (defn- time-this[f]
   (let [start (t/now)]

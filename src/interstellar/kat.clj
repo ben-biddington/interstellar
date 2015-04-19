@@ -42,11 +42,16 @@
 (defn imdb-link[url]
   (href (first (links-with-href-matching url "imdb"))))
 
+(defn- safe-parse-int[what]
+  (if (clojure.string/blank? what) 
+    0 
+    (Integer/parseInt what)))
+
 (defn kat-rating[url]
   "The rating as listed on the kat website (audio and video ratings by users)"
   {
-   :audio (-> (first (spans-with-id url "audioRating")) :content first Integer/parseInt)
-   :video (-> (first (spans-with-id url "videoRating")) :content first Integer/parseInt) })
+   :audio (-> (first (spans-with-id url "audioRating")) :content first safe-parse-int)
+   :video (-> (first (spans-with-id url "videoRating")) :content first safe-parse-int) })
 	
 (defn imdb-id[url]
   (let [link (imdb-link url)]

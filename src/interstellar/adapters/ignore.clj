@@ -9,7 +9,10 @@
 
 (defn seen-list[] (from-file))
 
-(defn seen?[name] (some #{name} (seen-list)))
+(defn seen?[name] 
+  (some 
+    #{(clojure.string/lower-case name)} 
+    (map #(-> % clojure.string/lower-case clojure.string/trim) (seen-list))))
 
 (defn seen[name]
   (when-not (seen? name)
