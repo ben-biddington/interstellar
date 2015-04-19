@@ -28,12 +28,10 @@
        (Double/parseDouble (second params)) 
        7.5)]))
 
-(defn- no-seen[ratings] (s/filter-out-seen ratings))
-
 (defn- filter-by-args[ratings args]
   (if (cli/contains? args "--no-seen")
-    (filter #(not (s/seen? (:title %))) ratings)
-    ratings))
+    (s/filter-out-seen ratings {:field :title})
+    ratings)) 
 
 (defn- run[args count min-score]
   (println (format "Running search with args <%s> (will read %s items from kat.ph, and look for a minimum imdb score of %s)\n" (if (nil? args) "none" args) count min-score))

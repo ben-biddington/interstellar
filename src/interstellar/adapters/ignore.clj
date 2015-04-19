@@ -11,7 +11,7 @@
 
 (defn seen?[name] 
   (some 
-    #{(clojure.string/lower-case name)} 
+    #{(clojure.string/lower-case (or name ""))} 
     (map #(-> % clojure.string/lower-case clojure.string/trim) (seen-list))))
 
 (defn seen[name]
@@ -21,6 +21,9 @@
        (let [new-value (conj current name)]
          (c/save new-value _file))))))
 
-(defn filter-out-seen[what]
-  "Filter out all the ones that have been seen"
-  (filter #((not (seen? %))) what))
+(defn filter-out-seen[what opts]
+  "Filters <what> by using the <:field> option"
+    (filter 
+     (fn[item] 
+       (not (seen? ((:field opts) item)))) 
+     what))
