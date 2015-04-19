@@ -28,7 +28,7 @@
        (Double/parseDouble (second params)) 
        7.5)]))
 
-(defn- no-seen[ratings] (filter #((not (s/seen? %))) ratings))
+(defn- no-seen[ratings] (s/filter-out-seen ratings))
 
 (defn- filter-by-args[ratings args]
   (if (cli/contains? args "--no-seen")

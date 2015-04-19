@@ -20,3 +20,7 @@
      (let [current (from-file)]
        (let [new-value (conj current name)]
          (c/save new-value _file))))))
+
+(defn filter-out-seen[what]
+  "Filter out all the ones that have been seen"
+  (filter #((not (seen? %))) what))
