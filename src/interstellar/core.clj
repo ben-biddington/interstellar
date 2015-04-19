@@ -13,10 +13,12 @@
    [interstellar.adapters.pills :refer :all :as loading]
    [interstellar.adapters.gui.cli :as gui]))
 
-(defn- time-this[f]
+(defn- time-this[f callback]
   (let [start (t/now)]
     (let [result (apply f [])]
-      { :duration (t/interval start (t/now)) :result result })))
+      (let [reply { :duration (t/interval start (t/now)) :result result }]
+        (apply callback [])
+        reply))))
 
 (defn- p[cli-args]
   (let [params (cli/params cli-args)]
@@ -38,8 +40,7 @@
   
   (loading/start)  
 
-  (let [timed-result (time-this #(search/basic count min-score))]
-    (loading/finish)
+  (let [timed-result (time-this #(search/basic count min-score) #(loading/finish))]
     (let [result (filter-by-args (:result timed-result) args)]
       (gui/prn-short result)
       (println "")
