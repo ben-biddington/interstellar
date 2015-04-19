@@ -2,12 +2,16 @@
   (:require [clojure.java.io :as io])  
   (:refer-clojure :exclude [read]))
 
-(defn save[map filename]
-  (spit filename map))
+(defn- exists?[filename] (.exists (io/file filename)))
+(defn- when-exists[filename fn]
+  (when (exists? filename)
+    (apply fn [])))
 
-(defn read[filename]
-  (read-string(slurp filename)))
+(defn save[map filename] (spit filename map))
+
+(defn read[filename] 
+  (when-exists filename #(read-string(slurp filename))))
 
 (defn clear[filename]
-  (when (.exists (io/file filename))
-    (io/delete-file filename)))
+  (when-exists filename
+    #(io/delete-file filename)))
