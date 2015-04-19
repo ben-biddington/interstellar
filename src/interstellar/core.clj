@@ -10,37 +10,8 @@
    [interstellar.adapters.ignore :refer :all :as s]
    [interstellar.lang :refer :all]
    [interstellar.adapters.cli :refer :all :as cli]
-   [interstellar.adapters.pills :refer :all :as loading]))
-
-(defn- format-title[t]
-  (clojure.pprint/cl-format nil "~75A" t)) ;; "~75,1,1,'.A" to use dots
-
-(defn- color[rating]
-  (if (s/seen? (-> rating :title))
-    :white
-    (if (> 8 (-> rating :kat-rating :video)) :red :green)))
-
-(defn- single[rating]
-  (let [a (-> rating :kat-rating :audio) v (-> rating :kat-rating :video)]
-    (format "[%s] -- %s %s" 
-      (-> rating :score) 
-      (-> rating :title format-title)
-      (format "(A: %s/10, V: %s/10)" a v))))
-
-(defn- legend[]
-  (println "")
-  (println "[" (c/style "-" :white)  "] -- seen")
-  (println "[" (c/style "-" :green)  "] -- good copy")
-  (println "[" (c/style "-" :red)  "] -- poor copy"))
-
-(defn- prn-short[ratings]
-  (doseq [rating ratings] 
-    (println 
-     (c/style
-      (single rating)
-      (color rating))))
-
-  (legend))
+   [interstellar.adapters.pills :refer :all :as loading]
+   [interstellar.adapters.gui.cli :as gui]))
 
 (defn- time-this[f]
   (let [start (t/now)]
@@ -72,7 +43,7 @@
   (let [timed-result (time-this #(search/basic count min-score))]
     (loading/finish)
     (let [result (filter-by-args (:result timed-result) args)]
-      (prn-short result)
+      (gui/prn-short result)
       (println "")
       (println (str "Required <" (:count @kat-request-count) "> rss requests to <kickass.to> and <" (str (web-request-count)) "> detail requests (page scrapes)"))
       (println (format "Duration: %ds\n" (t/in-seconds (:duration timed-result)))))))
