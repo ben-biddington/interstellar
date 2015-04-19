@@ -1,5 +1,6 @@
 (ns interstellar.core
   (:gen-class)
+  (:refer-clojure :exclude [find contains?])
   (:require 
    [interstellar.search :refer :all :as search]
    [interstellar.kat :refer :all]
@@ -7,7 +8,8 @@
    [clj-time.core :as t]
    [clansi.core :refer :all :as c]
    [interstellar.adapters.ignore :refer :all :as s]
-   [interstellar.lang :refer :all]))
+   [interstellar.lang :refer :all]
+   [interstellar.adapters.cli :refer :all :as cli]))
 
 (def pill-line-limit 75)
 
@@ -69,13 +71,21 @@
   (print "\n\n") (flush))  
 
 (defn- p[cli-args]
-  [
-   (if (> (count cli-args) 0) 
-     (Integer/parseInt (first cli-args)) 
-     100)
-   (if (> (count cli-args) 1) 
-     (Double/parseDouble (second cli-args)) 
-     7.5)])
+  (let [params (cli/params cli-args)]
+    [
+     (if (> (count params) 0) 
+       (Integer/parseInt (first params)) 
+       100)
+     (if (> (count params) 1) 
+       (Double/parseDouble (second params)) 
+       7.5)]))
+
+(defn- no-seen[ratings] (filter #((not (s/seen? %))) ratings))
+
+(defn- filter-by-args[ratings args]
+  (if (cli/contains? args "--no-seen")
+    (filter #(not (s/seen? (:title %))) ratings)
+    ratings))
 
 (defn- run[args count min-score]
   (println (format "Running search with args <%s> (will read %s items from kat.ph, and look for a minimum imdb score of %s)\n" (if (nil? args) "none" args) count min-score))
@@ -84,7 +94,7 @@
 
   (let [timed-result (time-this #(search/basic count min-score))]
     (finish)
-    (let [result (:result timed-result)]
+    (let [result (filter-by-args (:result timed-result) args)]
       (prn-short result)
       (println "")
       (println (str "Required <" (:count @kat-request-count) "> rss requests to <kickass.to> and <" (str (web-request-count)) "> detail requests (page scrapes)"))
