@@ -9,9 +9,8 @@
    [clansi.core :refer :all :as c]
    [interstellar.adapters.ignore :refer :all :as s]
    [interstellar.lang :refer :all]
-   [interstellar.adapters.cli :refer :all :as cli]))
-
-(def pill-line-limit 75)
+   [interstellar.adapters.cli :refer :all :as cli]
+   [interstellar.adapters.pills :refer :all :as loading]))
 
 (defn- format-title[t]
   (clojure.pprint/cl-format nil "~75A" t)) ;; "~75,1,1,'.A" to use dots
@@ -48,29 +47,6 @@
     (let [result (apply f [])]
       { :duration (t/interval start (t/now)) :result result })))
 
-(def ^{:private true} running (atom false))
-(def ^{:private true} pill-count (atom 0))
-(def ^{:private true} started-at (atom nil))
-
-(defn- runtime[] (t/in-seconds (t/interval @started-at (t/now))))
-
-(defn- start[] 
-  (reset! running true)
-  (reset! started-at (t/now))
-  (future 
-    (while @running 
-      (do 
-        (Thread/sleep 100) 
-        (print ".") (swap! pill-count inc)
-        (when (= 0 (mod @pill-count pill-line-limit))
-          (print (format " -- [%ss]\n" (runtime))))
-        (flush)))))
-  
-(defn- finish[] 
-  (reset! running false)
-  (flush)
-  (print "\n\n") (flush))  
-
 (defn- p[cli-args]
   (let [params (cli/params cli-args)]
     [
@@ -91,10 +67,10 @@
 (defn- run[args count min-score]
   (println (format "Running search with args <%s> (will read %s items from kat.ph, and look for a minimum imdb score of %s)\n" (if (nil? args) "none" args) count min-score))
   
-  (start)  
+  (loading/start)  
 
   (let [timed-result (time-this #(search/basic count min-score))]
-    (finish)
+    (loading/finish)
     (let [result (filter-by-args (:result timed-result) args)]
       (prn-short result)
       (println "")
