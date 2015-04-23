@@ -1,6 +1,5 @@
 (ns interstellar.search
   (:require [interstellar.kat :refer :all]
-            [interstellar.kat-rss :refer :all]
             [interstellar.adapters.imdb :refer :all]))
 
 (defn- all-detail-ids[info] (map :imdb-id info))
