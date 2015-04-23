@@ -1,15 +1,30 @@
 (ns interstellar.kat-rss
   (:require [clojure.xml :as xml]))
 
+(defstruct kat-rss-feed-item :url :seeds :peers)
+
 (defn- rss[earl] (xml/parse earl))
 
 (def ^{:private true} host "http://kickass.to")
 
 (def page-size 25)
 
+(defn- by-tag[tags tagname]
+  (filter (fn[t] (= tagname (-> t :tag))) tags))
+
+(defn- first-by-tag [tags tagname] (first (by-tag tags tagname)))
+
+(defn- first-value-by-tag [tags tagname] 
+  (let [tag (first-by-tag tags tagname)]
+    (-> tag :content first)))
+
 (defn- rss-links[earl]
   (let [rss-feed (rss earl)]
-     (for [n (xml-seq rss-feed) :when (= :link (:tag n))] (first (:content n)))))
+     (for [item (xml-seq rss-feed) :when (= :item (:tag item))] 
+         (struct kat-rss-feed-item 
+                 (first-value-by-tag (-> item :content) :link) 
+                 (first-value-by-tag (-> item :content) :seeds)
+                 (first-value-by-tag (-> item :content) :peers)))))
 
 (def kat-request-count (atom {:count 0}))
 
@@ -20,7 +35,7 @@
 
 (defn- kat-rss-links-page[n]
   (increment-count)
-  (drop 1 (rss-links (str host "/movies/" n "/?rss=true&field=seeders&sorder=desc"))))
+  (map #(-> % :url) (rss-links (str host "/movies/" n "/?rss=true&field=seeders&sorder=desc"))))
 
 (defn kat-rss-links
   "Find n pages of rss links"

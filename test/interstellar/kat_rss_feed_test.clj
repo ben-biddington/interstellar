@@ -7,8 +7,8 @@
 ;; https://clojuredocs.org/clojure.core/for
 ;; http://gettingclojure.wikidot.com/cookbook:xml-html
 (deftest finding-detail-earls-via-kat-rss
-  (testing "can find say the first 3 pages at once"
-    (let [result (kat-rss-links 3)]
-      (is (= 75 (count result)))))
+  (testing "can find say the first page"
+    (let [result (kat-rss-links 1)]
+      (is (= 25 (count result)))))
 )
 
