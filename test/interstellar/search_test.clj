@@ -2,8 +2,8 @@
   (:require [clojure.test :refer :all]
             [interstellar.search :refer :all :as search]))
 
-(deftest that-you-get-extra-info-back
+(deftest it-returns-a-v-quality-ratings
   (testing "for example"
-    (let [result (search/basic 2 7.5)]
-      ;(println "Results: " result)
-      )))
+    (let [result (first (search/basic 2 7.5))]
+      (is (<= 0 (-> result :kat-rating :audio)), (format "Expected to find audio rating in <%s>" result))
+      (is (<= 0 (-> result :kat-rating :video))) (format "Expected to find video rating in <%s>" result))))
