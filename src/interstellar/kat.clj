@@ -29,9 +29,9 @@
      (if (< 0 (rem n page-size)) 1 0)
      (max 1 (quot n page-size)))))
 
-(defn- detail-earls [n]
+(defn- detail-items [n]
   "Finds <n> detail page urls by querying the rss feed"
-  (map #(:url %) (kat-rss-items (how-many? n))))
+  (kat-rss-items (how-many? n)))
 
 (defn- has-href-matching?[element, name]
   (let [href (href element)]
@@ -67,12 +67,15 @@
       nil
       (first (re-find (re-matcher #"(tt[0-9]+)" link))))))
 
-(defn- info-for [url] {:imdb-id (imdb-id url) :kat-rating (kat-rating url)})
+(defn- info-for [item] {
+                        :imdb-id (imdb-id (:url item)) 
+                        :kat-rating (kat-rating (:url item)) 
+                        :health {:seeds (:seeds item) :peers (:peers item)}})
 
 (defn kat-info [n]
   "Gets n pages of info (imdb-id, kat-rating)"
-  (pmap info-for (detail-earls n)))
+  (pmap info-for (detail-items n)))
 	
 (defn detail-ids[]
   "Gets n pages of imdb ids"
-  (let [earls (detail-earls)] (pmap imdb-id earls)))
+  (let [earls (map #(:url %) (detail-items))] (pmap imdb-id earls)))

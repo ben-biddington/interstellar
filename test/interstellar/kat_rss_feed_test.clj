@@ -9,8 +9,6 @@
 (deftest finding-kat-rss-items
   (testing "can find say the first page"
     (let [result (kat-rss-items 1)]
-      (println result)
       (is (= 25 (count result)))
-      (is (not (nil? (:seeds (first result)))))))
-)
+      (is (not (nil? (:seeds (first result))))))))
 

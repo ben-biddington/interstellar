@@ -11,4 +11,5 @@
 (deftest it-returns-seed-health
   (testing "for example"
     (let [result (first (search/basic 2 7.5))]
-      (is (not (nil? (-> result :health :seed))), (format "Expected to find seed health in <%s>" result)))))
+      (is (not (nil? (-> result :health :seeds))), (format "Expected to find seeds in <%s>" result))
+      (is (not (nil? (-> result :health :peers))), (format "Expected to find peers in <%s>" result)))))
