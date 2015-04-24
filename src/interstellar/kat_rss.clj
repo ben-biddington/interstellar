@@ -23,8 +23,8 @@
      (for [item (xml-seq rss-feed) :when (= :item (:tag item))] 
          (struct kat-rss-feed-item 
                  (first-value-by-tag (-> item :content) :link) 
-                 (first-value-by-tag (-> item :content) :seeds)
-                 (first-value-by-tag (-> item :content) :peers)))))
+                 (first-value-by-tag (-> item :content) :torrent:seeds)
+                 (first-value-by-tag (-> item :content) :torrent:peers)))))
 
 (def kat-request-count (atom {:count 0}))
 
