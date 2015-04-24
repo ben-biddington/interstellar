@@ -76,6 +76,12 @@
   "Gets n pages of info (imdb-id, kat-rating)"
   (pmap info-for (detail-items n)))
 	
+(def ^{:private true} index (atom 0))
+
+(defn- next[]
+  (swap! index inc)
+  @index)
+
 (defn detail-ids[]
   "Gets n pages of imdb ids"
   (let [earls (map #(:url %) (detail-items))] (pmap imdb-id earls)))
