@@ -8,6 +8,7 @@
   (:require [net.cgrand.jsoup :as jsoup])
   (:require [net.cgrand.xml :as xml])
   (:require [interstellar.kat-rss :refer :all])
+  (:require [interstellar.core :refer :all])
   (:require [interstellar.t-internet :refer :all :as net]))
 
 (def  ^{:private true} debug (=(System/getenv "LOUD") "ON"))
@@ -50,11 +51,6 @@
 (defn imdb-link[url]
   (href (first (links-with-href-matching url "imdb"))))
 
-(defn- safe-parse-int[what]
-  (if (clojure.string/blank? what) 
-    0 
-    (Integer/parseInt what)))
-
 (defn kat-rating[url]
   "The rating as listed on the kat website (audio and video ratings by users)"
   {
@@ -75,13 +71,7 @@
 (defn kat-info [n]
   "Gets n pages of info (imdb-id, kat-rating)"
   (pmap info-for (detail-items n)))
-	
-(def ^{:private true} index (atom 0))
-
-(defn- next[]
-  (swap! index inc)
-  @index)
 
 (defn detail-ids[]
   "Gets n pages of imdb ids"
-  (let [earls (map #(:url %) (detail-items))] (pmap imdb-id earls)))
+  (let [earls (map #(:url %) (detail-items))] (map imdb-id earls))) ;; @todo -- revert to pmap again

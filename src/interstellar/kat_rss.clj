@@ -1,7 +1,16 @@
 (ns interstellar.kat-rss
-  (:require [clojure.xml :as xml]))
+  (:require [clojure.xml :as xml]
+            [interstellar.core :refer :all]))
 
-(defstruct kat-rss-feed-item :url :seeds :peers)
+(def ^{:private true} index (atom 0))
+
+(defn- next-index[]
+  (swap! index inc)
+  @index)
+
+(defn- reset[] (reset! index 0))
+
+(defstruct kat-rss-feed-item :index :url :seeds :peers)
 
 (defn- rss[earl] (xml/parse earl))
 
@@ -21,10 +30,11 @@
 (defn- rss-links[earl]
   (let [rss-feed (rss earl)]
      (for [item (xml-seq rss-feed) :when (= :item (:tag item))] 
-         (struct kat-rss-feed-item 
+         (struct kat-rss-feed-item
+                 (next-index)
                  (first-value-by-tag (-> item :content) :link) 
-                 (first-value-by-tag (-> item :content) :torrent:seeds)
-                 (first-value-by-tag (-> item :content) :torrent:peers)))))
+                 (safe-parse-int (first-value-by-tag (-> item :content) :torrent:seeds))
+                 (safe-parse-int (first-value-by-tag (-> item :content) :torrent:peers))))))
 
 (def kat-request-count (atom {:count 0}))
 
@@ -40,4 +50,5 @@
 (defn kat-rss-items
   "Find n pages of rss links"
   [n]
+  (reset)
   (flatten (map kat-rss-items-page (range 1 (+ 1 n)))))
