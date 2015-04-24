@@ -31,7 +31,7 @@
 
 (defn- detail-earls [n]
   "Finds <n> detail page urls by querying the rss feed"
-    (kat-rss-links (how-many? n)))
+  (map #(:url %) (kat-rss-items (how-many? n))))
 
 (defn- has-href-matching?[element, name]
   (let [href (href element)]
