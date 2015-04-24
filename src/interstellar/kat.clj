@@ -70,10 +70,5 @@
 
 (defn kat-info [n]
   "Gets n pages of info (imdb-id, kat-rating)"
-  (pmap info-for (detail-items n)))
-
-(defn detail-ids[]
-  "Gets n pages of imdb ids"
   ;; Here, item is a kat-rss-feed-item => {:index :url :seeds :peers}
-  (let [items (map #(:url %) (detail-items))] 
-    (map imdb-id items))) ;; @todo -- revert to pmap again
+  (pmap info-for (detail-items n)))
