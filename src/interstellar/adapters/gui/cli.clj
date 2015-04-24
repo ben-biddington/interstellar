@@ -20,11 +20,11 @@
   (clojure.pprint/cl-format nil "~75A" t)) ;; "~75,1,1,'.A" to use dots
 
 (defn- single[rating]
-  (let [a (-> rating :kat-rating :audio) v (-> rating :kat-rating :video)]
+  (let [a (-> rating :kat-rating :audio) v (-> rating :kat-rating :video) s (-> rating :health :seeds) p (-> rating :health :peers)]
     (format "[%s] -- %s %s" 
       (-> rating :score) 
       (-> rating :title format-title)
-      (format "(A: %s/10, V: %s/10)" a v))))
+      (format "(A: %s/10, V: %s/10) (seeds: %s, peers: %s)" a v s p))))
 
 (defn prn-short[ratings]
   (doseq [rating ratings] 
