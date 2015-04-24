@@ -59,9 +59,9 @@
 	
 (defn imdb-id[url]
   (let [link (imdb-link url)]
-    (if (nil? link)
-      nil
-      (first (re-find (re-matcher #"(tt[0-9]+)" link))))))
+    (let [imdb-id (if (nil? link) nil (first-match link #"(tt[0-9]+)"))]
+      imdb-id
+      )))
 
 (defn- info-for [item] {
                         :imdb-id (imdb-id (:url item)) 
@@ -74,4 +74,6 @@
 
 (defn detail-ids[]
   "Gets n pages of imdb ids"
-  (let [earls (map #(:url %) (detail-items))] (map imdb-id earls))) ;; @todo -- revert to pmap again
+  ;; Here, item is a kat-rss-feed-item => {:index :url :seeds :peers}
+  (let [items (map #(:url %) (detail-items))] 
+    (map imdb-id items))) ;; @todo -- revert to pmap again
