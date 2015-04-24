@@ -33,16 +33,6 @@
       (fn[current-state] 
         (merge-with + current-state {:count 1}))))
 
-(defn- kat-rss-links-page[n]
-  "[DEPRECATED => kat-rss-items]-page"
-  (increment-count)
-  (map #(-> % :url) (rss-links (str host "/movies/" n "/?rss=true&field=seeders&sorder=desc"))))
-
-(defn- kat-rss-links
-  "[DEPRECATED => kat-rss-items] Find n pages of rss links"
-  [n]
-  (flatten (pmap kat-rss-links-page (range 1 (+ 1 n)))))
-
 (defn- kat-rss-items-page[n]
   (increment-count)
   (rss-links (str host "/movies/" n "/?rss=true&field=seeders&sorder=desc")))
