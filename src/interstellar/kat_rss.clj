@@ -40,4 +40,4 @@
 (defn kat-rss-items
   "Find n pages of rss links"
   [n]
-  (flatten (pmap kat-rss-items-page (range 1 (+ 1 n)))))
+  (flatten (map kat-rss-items-page (range 1 (+ 1 n)))))
