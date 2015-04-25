@@ -1,14 +1,15 @@
 (ns interstellar.directory-cache-test
   (:require 
    [clojure.test :refer :all]
-   [interstellar.adapters.directory-cache :as dir-cache]))
+   [interstellar.adapters.web-cache :as web-cache]))
 
 (def cache-dir ".tmp/")
 
 (defn around[fn]
   (.mkdir (java.io.File. cache-dir))
   (apply fn [])
-  (.delete (java.io.File. cache-dir)))
+  (when (nil? (System/getenv "NO-CLOBBER")) 
+    (.delete (java.io.File. cache-dir))))
 
 (use-fixtures :each around)
 
@@ -17,6 +18,7 @@
 
 (deftest can-cache-an-earl-and-file-appears
   (testing "for example, cache a web page by its url"
-    (dir-cache/save cache-dir "http://example-url" "<html />")
-    (is (= true (exists-on-disk? "http://example-url/a-b-c")) "Expeted the cache to have written to disk")))
+    (let [url "http://example-url" body "<html />"]
+      (web-cache/save cache-dir url body)
+      (is (= true (exists-on-disk? (web-cache/safe-key url))) "Expeted the cache to have written to disk"))))
 

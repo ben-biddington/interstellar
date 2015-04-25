@@ -1,3 +1,5 @@
-(ns interstellar.adapters.directory-cache)
+(ns interstellar.adapters.directory-cache
+  (:require [clojure.java.io :as io]))
 
-(defn save[dir-name name contents])
+(defn save [cache-dir name contents]
+  (spit (io/file cache-dir name) contents))
