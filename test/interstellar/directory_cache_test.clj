@@ -23,12 +23,18 @@
   (let [url "http://example-url" body "<html />"]
     (testing "that is produces a file on disk"
       (web-cache/save cache-dir url body)
-      (is (= true (exists-on-disk? (web-cache/safe-key url))) "Expeted the cache to have written to disk"))
+      (is (= true (exists-on-disk? (web-cache/safe-key url))) "Expeted the cache to have written to disk"))))
 
-    (testing "that asking for it back produces the right body"
-      (web-cache/save cache-dir url body)
-      (let [cached-body (web-cache/get cache-dir url)]
-        (is (= "<html />" cached-body))))))
+(deftest it-caches-individual-resources
+  (testing "for example two different resources"
+    (web-cache/save cache-dir "http://fillums.org/a" "A")
+    (web-cache/save cache-dir "http://fillums.org/b" "B")
+    
+    (let [cached-body-a (web-cache/get cache-dir "http://fillums.org/a")]
+      (is (= "A" cached-body-a)))
+
+    (let [cached-body-b (web-cache/get cache-dir "http://fillums.org/b")]
+      (is (= "B" cached-body-b)))))
 
 ;; TEST: it returns nil for url that is no cached
 
