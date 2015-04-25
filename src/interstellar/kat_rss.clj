@@ -51,4 +51,4 @@
   "Find n pages of rss links"
   [n]
   (reset)
-  (flatten (map kat-rss-items-page (range 1 (+ 1 n)))))
+  (flatten (pmap kat-rss-items-page (range 1 (+ 1 n)))))

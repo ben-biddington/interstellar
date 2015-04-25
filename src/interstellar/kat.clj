@@ -72,5 +72,4 @@
 
 (defn kat-info [n]
   "Gets n kat items (imdb-id, kat-rating)"
-  ;; Here, item is a kat-rss-feed-item => {:index :url :seeds :peers}
-  (sort-by :index (pmap info-for (detail-items n))))
+  (reverse (sort-by :index (pmap info-for (detail-items n)))))
