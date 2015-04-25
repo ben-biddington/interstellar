@@ -24,7 +24,7 @@
     (format "[%s] -- %s %s"
       (-> rating :score) 
       (-> rating :title format-title)
-      (format "(A: %s/10, V: %s/10) (index: %s) (seeds: %s, peers: %s)" a v i s p))))
+      (format "(A: %s/10, V: %s/10) (index: %03d) (seeds: %5d, peers: %5d)" a v i s p))))
 
 (defn prn-short[ratings]
   (doseq [rating ratings] 
