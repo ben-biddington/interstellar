@@ -39,7 +39,7 @@
 
 (def ^{:private true} cache-dir ".web-cache")
 
-(def ^{:private true} disk-cache? false)
+(def ^{:private true} disk-cache? false) ; @todo: can't get serialization working
 
 (defn- custom-nice-get[earl]
   (locking lock
