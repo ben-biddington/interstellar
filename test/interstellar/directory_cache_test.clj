@@ -54,5 +54,4 @@
 
 (deftest can-use-the-memoization-plugin
   (testing "for example"
-    (DiskWebCache. cache-dir)
-    ))
+    (is (= true (has? (DiskWebCache. cache-dir) "http://fillums.org/a")))))
