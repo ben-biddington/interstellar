@@ -17,6 +17,7 @@
 (defn get[cache-dir url]
   (inner/get cache-dir (safe-key url)))
 
+; @todo: try using this in <t-internet>
 (deftype DiskWebCache [cache-dir] 
   ;; => https://github.com/clojure/core.cache/blob/a77b003d6593f7bde2f27f03ec52310b68aa0ea6/src/main/clojure/clojure/core/cache.clj#L20
   clojure.core.cache/CacheProtocol

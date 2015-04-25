@@ -8,7 +8,8 @@
   (:require [net.cgrand.jsoup :as jsoup])
   (:require [net.cgrand.xml :as xml])
   (:require [interstellar.adapters.web-cache :as web-cache] 
-            [clojure.core.memoize :as memo]))
+            [clojure.core.memoize :as memo]
+            [clojure.data.json :as json]))
 
 (def ^{:private true} r-count (atom 0))
 (defn- to-earl[text] (URL. text))
@@ -38,18 +39,22 @@
 
 (def ^{:private true} cache-dir ".web-cache")
 
-(defn nice-get-gzip[earl]
-  "Same as <get-gzip> but it only fetches a URL once"
-  ;(apply nice [earl])
+(def ^{:private true} disk-cache? false)
+
+(defn- custom-nice-get[earl]
   (locking lock
     (.mkdir (java.io.File. cache-dir))
     (let [cached (web-cache/get cache-dir earl)]
       (if (nil? cached)
         (do
           (let [fresh (get-gzip earl)]
-            (web-cache/save cache-dir earl fresh)
-            fresh)
-        cached
-        )
-      )
+            (web-cache/save cache-dir earl (json/write-str fresh))
+            fresh))
+        (json/read-str cached))
     )))
+
+(defn nice-get-gzip[earl]
+  "Same as <get-gzip> but it only fetches a URL once"
+  (if disk-cache?
+    (custom-nice-get earl)
+    (apply nice [earl])))
