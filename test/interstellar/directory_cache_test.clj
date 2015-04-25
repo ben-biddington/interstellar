@@ -37,5 +37,22 @@
       (is (= "B" cached-body-b)))))
 
 (deftest it-returns-nil-for-missing-resource
-  (is (nil? (web-cache/get cache-dir "http://fillums.org/404"))))
+  (testing "for example"
+    (is (nil? (web-cache/get cache-dir "http://fillums.org/404")))))
 
+
+(deftype DiskWebCache [cache-dir] ;; implement in terms of web-cache functions ;; > https://github.com/clojure/core.cache/blob/a77b003d6593f7bde2f27f03ec52310b68aa0ea6/src/main/clojure/clojure/core/cache.clj#L20
+    clojure.core.cache/CacheProtocol
+    
+    (lookup  [cache e])
+    (lookup  [cache e not-found])
+    (has?    [cache e])
+    (hit     [cache e])
+    (miss    [cache e ret])
+    (evict   [cache e])
+    (seed    [cache base]))
+
+(deftest can-use-the-memoization-plugin
+  (testing "for example"
+    (DiskWebCache. cache-dir)
+    ))

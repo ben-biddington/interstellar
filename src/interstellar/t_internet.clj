@@ -6,7 +6,9 @@
   (:import java.util.zip.GZIPInputStream)
   (:require [net.cgrand.tagsoup :as tagsoup])
   (:require [net.cgrand.jsoup :as jsoup])
-  (:require [net.cgrand.xml :as xml]))
+  (:require [net.cgrand.xml :as xml])
+  (:require [interstellar.adapters.web-cache :as web-cache] 
+            [clojure.core.memoize :as memo]))
 
 (def ^{:private true} r-count (atom 0))
 (defn- to-earl[text] (URL. text))
@@ -23,6 +25,12 @@
     (swap! r-count inc)
     (html-resource (to-earl earl) {:parser gzip-html-parser})
     (catch java.io.FileNotFoundException e {}))) ;; Sometimes the urls are missing and return 404))
+
+(defn- memo-xxx [f]
+  (clojure.core.memoize/build-memoizer
+       #({})
+       f
+       {}))
 
 (def ^{:private true} nice (memoize get-gzip))
 
