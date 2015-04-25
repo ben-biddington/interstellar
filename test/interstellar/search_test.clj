@@ -13,3 +13,10 @@
     (let [result (first (search/basic 2 7.5))]
       (is (not (nil? (-> result :health :seeds))), (format "Expected to find seeds in <%s>" result))
       (is (not (nil? (-> result :health :peers))), (format "Expected to find peers in <%s>" result)))))
+
+(deftest it-returns-titles-sorted-by-index
+  (testing "for example"
+    (let [result (search/basic 10 5.0)]
+      (let [first (-> result first :index) last (-> result last :index)]
+        (println (search/basic 10 5.0))
+        (is (< first last), "Expeted the first one to have smaller index than the last to prove sorting")))))

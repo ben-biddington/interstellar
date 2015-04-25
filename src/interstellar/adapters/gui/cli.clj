@@ -17,14 +17,14 @@
     (if (> 8 (-> rating :kat-rating :video)) :red :green)))
 
 (defn- format-title[t]
-  (clojure.pprint/cl-format nil "~75A" t)) ;; "~75,1,1,'.A" to use dots
+  (clojure.pprint/cl-format nil "~60A" t)) ;; "~75,1,1,'.A" to use dots
 
 (defn- single[rating]
-  (let [a (-> rating :kat-rating :audio) v (-> rating :kat-rating :video) s (-> rating :health :seeds) p (-> rating :health :peers)]
-    (format "[%s] -- %s %s" 
+  (let [a (-> rating :kat-rating :audio) v (-> rating :kat-rating :video) s (-> rating :health :seeds) p (-> rating :health :peers) i (-> rating :index)]
+    (format "[%s] -- %s %s"
       (-> rating :score) 
       (-> rating :title format-title)
-      (format "(A: %s/10, V: %s/10) (seeds: %s, peers: %s)" a v s p))))
+      (format "(A: %s/10, V: %s/10) (index: %s) (seeds: %s, peers: %s)" a v i s p))))
 
 (defn prn-short[ratings]
   (doseq [rating ratings] 
