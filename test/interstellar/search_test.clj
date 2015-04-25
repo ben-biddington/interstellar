@@ -18,5 +18,4 @@
   (testing "for example"
     (let [result (search/basic 10 5.0)]
       (let [first (-> result first :index) last (-> result last :index)]
-        (println (search/basic 10 5.0))
         (is (< first last), "Expeted the first one to have smaller index than the last to prove sorting")))))
