@@ -41,12 +41,12 @@
   (testing "for example"
     (is (nil? (web-cache/get cache-dir "http://fillums.org/404")))))
 
-
 (deftype DiskWebCache [cache-dir] 
   ;; => https://github.com/clojure/core.cache/blob/a77b003d6593f7bde2f27f03ec52310b68aa0ea6/src/main/clojure/clojure/core/cache.clj#L20
   clojure.core.cache/CacheProtocol
     
-  (lookup  [cache e])
+  (lookup  [cache e]
+    (web-cache/get cache-dir e))
   (lookup  [cache e not-found])
   (has?    [cache e]
     (web-cache/contains? cache-dir e))
@@ -61,3 +61,16 @@
     (let [c (DiskWebCache. cache-dir)]
       (is (has? c "http://fillums.org/examples"))
       (is (not (has? c "http://fillums.org/404"))))))
+
+(deftest lookup-returns-item-when-it-exists-otherwise-nil
+  (let [c (DiskWebCache. cache-dir)]
+    (testing "that it returns the right item"
+      (web-cache/save cache-dir "http://fillums.org/a" "A")
+      (web-cache/save cache-dir "http://fillums.org/b" "B")
+      (let [found (lookup c "http://fillums.org/a")]
+        (is (= "A" found))))
+
+    (testing "that it returns nil otherwise"
+      (let [c (DiskWebCache. cache-dir)]
+        (let [found (lookup c "xxx-does-not-exist-xxx")]
+          (is (nil? found)))))))
