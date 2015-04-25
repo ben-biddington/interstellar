@@ -1,24 +1,34 @@
 (ns interstellar.directory-cache-test
+  (:refer-clojure :exclude [:get])
   (:require 
    [clojure.test :refer :all]
    [interstellar.adapters.web-cache :as web-cache]))
 
 (def cache-dir ".tmp/")
+(defn- clear[] (.delete (java.io.File. cache-dir)))
 
 (defn around[fn]
+  (clear)
   (.mkdir (java.io.File. cache-dir))
   (apply fn [])
   (when (nil? (System/getenv "NO-CLOBBER")) 
-    (.delete (java.io.File. cache-dir))))
+    (clear)))
 
 (use-fixtures :each around)
 
 (defn- exists-on-disk?[file]
   (.exists (java.io.File. (str cache-dir "/" file))))
 
-(deftest can-cache-an-earl-and-file-appears
-  (testing "for example, cache a web page by its url"
-    (let [url "http://example-url" body "<html />"]
+(deftest can-cache-a-web-page-in-a-dir-on-disk
+  (let [url "http://example-url" body "<html />"]
+    (testing "that is produces a file on disk"
       (web-cache/save cache-dir url body)
-      (is (= true (exists-on-disk? (web-cache/safe-key url))) "Expeted the cache to have written to disk"))))
+      (is (= true (exists-on-disk? (web-cache/safe-key url))) "Expeted the cache to have written to disk"))
+
+    (testing "that asking for it back produces the right body"
+      (web-cache/save cache-dir url body)
+      (let [cached-body (web-cache/get cache-dir url)]
+        (is (= "<html />" cached-body))))))
+
+;; TEST: it returns nil for url that is no cached
 
