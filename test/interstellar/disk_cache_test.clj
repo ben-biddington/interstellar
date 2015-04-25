@@ -3,7 +3,7 @@
    [clojure.test :refer :all]
    [interstellar.adapters.disk-cache :as disk-cache]))
 
-(def cache-file ".tmp")
+(def cache-file ".tmp/cache")
 
 (defn before[fn]
   (disk-cache/clear cache-file)

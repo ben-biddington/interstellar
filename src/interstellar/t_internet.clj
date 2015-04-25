@@ -26,9 +26,9 @@
     (html-resource (to-earl earl) {:parser gzip-html-parser})
     (catch java.io.FileNotFoundException e {}))) ;; Sometimes the urls are missing and return 404))
 
-(defn- memo-xxx [f]
+(defn- memoize-to-disk [f]
   (clojure.core.memoize/build-memoizer
-       #({})
+       #(web-cache/new-disk-web-cache)
        f
        {}))
 
