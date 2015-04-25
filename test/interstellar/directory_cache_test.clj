@@ -36,5 +36,6 @@
     (let [cached-body-b (web-cache/get cache-dir "http://fillums.org/b")]
       (is (= "B" cached-body-b)))))
 
-;; TEST: it returns nil for url that is no cached
+(deftest it-returns-nil-for-missing-resource
+  (is (nil? (web-cache/get cache-dir "http://fillums.org/404"))))
 
