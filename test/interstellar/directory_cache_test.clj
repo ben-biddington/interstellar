@@ -2,6 +2,7 @@
   (:refer-clojure :exclude [:get])
   (:require 
    [clojure.test :refer :all]
+   [clojure.core.cache :refer :all]
    [interstellar.adapters.web-cache :as web-cache]))
 
 (def cache-dir ".tmp/")
@@ -41,17 +42,22 @@
     (is (nil? (web-cache/get cache-dir "http://fillums.org/404")))))
 
 
-(deftype DiskWebCache [cache-dir] ;; implement in terms of web-cache functions ;; > https://github.com/clojure/core.cache/blob/a77b003d6593f7bde2f27f03ec52310b68aa0ea6/src/main/clojure/clojure/core/cache.clj#L20
-    clojure.core.cache/CacheProtocol
+(deftype DiskWebCache [cache-dir] 
+  ;; => https://github.com/clojure/core.cache/blob/a77b003d6593f7bde2f27f03ec52310b68aa0ea6/src/main/clojure/clojure/core/cache.clj#L20
+  clojure.core.cache/CacheProtocol
     
-    (lookup  [cache e])
-    (lookup  [cache e not-found])
-    (has?    [cache e])
-    (hit     [cache e])
-    (miss    [cache e ret])
-    (evict   [cache e])
-    (seed    [cache base]))
+  (lookup  [cache e])
+  (lookup  [cache e not-found])
+  (has?    [cache e]
+    (web-cache/contains? cache-dir e))
+  (hit     [cache e])
+  (miss    [cache e ret])
+  (evict   [cache e])
+  (seed    [cache base]))
 
-(deftest can-use-the-memoization-plugin
-  (testing "for example"
-    (is (= true (has? (DiskWebCache. cache-dir) "http://fillums.org/a")))))
+(deftest can-use-it-as-memoization-plugin-like-this
+  (testing "that has? returns true when item exists"
+    (web-cache/save cache-dir "http://fillums.org/examples" "example")
+    (let [c (DiskWebCache. cache-dir)]
+      (is (has? c "http://fillums.org/examples"))
+      (is (not (has? c "http://fillums.org/404"))))))
