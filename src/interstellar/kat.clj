@@ -24,15 +24,15 @@
 (defn- spans        [earl] (browser-get earl :span))
 (defn- has-class?   [element, name] (= name (get-in element [:attrs :class])))
 (defn- href         [link]          (-> link :attrs :href))
-(defn- how-many?[n]
+(defn- how-many-pages?[n]
   (let [page-size interstellar.kat-rss/page-size]
     (+
-     (if (< 0 (rem n page-size)) 1 0)
+     (if (and (> n page-size) (< 0 (rem n page-size))) 1 0)
      (max 1 (quot n page-size)))))
 
 (defn- detail-items [n]
-  "Finds <n> detail page urls by querying the rss feed"
-  (kat-rss-items (how-many? n)))
+  "Finds <n> rss items"
+  (kat-rss-items (how-many-pages? n)))
 
 (defn- has-href-matching?[element, name]
   (let [href (href element)]
@@ -63,12 +63,14 @@
       imdb-id
       )))
 
-(defn- info-for [item] {
-                        :imdb-id (imdb-id (:url item)) 
-                        :kat-rating (kat-rating (:url item)) 
-                        :health {:seeds (:seeds item) :peers (:peers item)}})
+(defn- info-for [item] 
+  {
+   :index (-> item :index)
+   :imdb-id (imdb-id (:url item)) 
+   :kat-rating (kat-rating (:url item)) 
+   :health {:seeds (:seeds item) :peers (:peers item)}})
 
 (defn kat-info [n]
-  "Gets n pages of info (imdb-id, kat-rating)"
+  "Gets n kat items (imdb-id, kat-rating)"
   ;; Here, item is a kat-rss-feed-item => {:index :url :seeds :peers}
-  (pmap info-for (detail-items n)))
+  (sort-by :index (pmap info-for (detail-items n))))
