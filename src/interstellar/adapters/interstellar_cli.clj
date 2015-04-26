@@ -44,7 +44,10 @@
     (let [result (filter-by-args (:result timed-result) args)]
       (gui/prn-short result)
       (println "")
-      (println (str "Required <" (:count @kat-request-count) "> rss requests to <kickass.to> and <" (str (web-request-count)) "> detail requests (page scrapes)"))
+      (println (str 
+                "Required <" (:count @kat-request-count) "> rss requests to <kickass.to> " 
+                "and <" (str (web-request-count)) "> detail requests (page scrapes), " 
+                "plus <" (interstellar.adapters.imdb/request-count) "> omdb API requests"))
       (println (format "Duration: %ds\n" (t/in-seconds (:duration timed-result)))))))
 
 (defn -main [& args]

@@ -1,4 +1,5 @@
 (ns interstellar.adapters.imdb
+  (:refer-clojure :exclude [count])
   (:require 
    [org.httpkit.client :as http]
    [clojure.data.json :as json]
@@ -7,6 +8,10 @@
 (def earl "http://www.omdbapi.com" )
 
 (defstruct fillum :imdb-id :title :metascore :score)
+
+(def ^{:private true} count (atom 0))
+
+(defn request-count[] @count)
 
 (defn ^{:private true} as-double[text]
   (try
@@ -19,6 +24,7 @@
     (catch Exception e 0)))
 
 (defn ^{:private true} omdb-query [opts]
+  (swap! count inc)
   (let [{:keys [status headers body error]} @(http/get earl {:query-params opts :headers {"User-Agent" "ben.biddington@gmail.com"}})]
     (when-not (nil? error)
       (core/fail "The request to <%s> with params <%s> failed with an error <%s>" earl opts error))
