@@ -31,7 +31,7 @@
   (let [rss-feed (rss earl)]
      (for [item (xml-seq rss-feed) :when (= :item (:tag item))] 
          (struct kat-rss-feed-item
-                 (+ (next-index) (* 100 n))
+                 (next-index)
                  (first-value-by-tag (-> item :content) :link) 
                  (safe-parse-int (first-value-by-tag (-> item :content) :torrent:seeds))
                  (safe-parse-int (first-value-by-tag (-> item :content) :torrent:peers))))))
