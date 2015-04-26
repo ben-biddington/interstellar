@@ -2,7 +2,6 @@
   (:refer-clojure :exclude [get contains?])
   (:import java.net.URLEncoder)
   (:require 
-   [clojure.java.io :as io]
    [clojure.core.cache :as cache]
    [interstellar.adapters.directory-cache :as inner]))
 

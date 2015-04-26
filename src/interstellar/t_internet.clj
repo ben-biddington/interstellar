@@ -8,8 +8,7 @@
   (:require [net.cgrand.jsoup :as jsoup])
   (:require [net.cgrand.xml :as xml])
   (:require [interstellar.adapters.web-cache :as web-cache] 
-            [clojure.core.memoize :as memo]
-            [clojure.data.json :as json]))
+            [clojure.core.memoize :as memo]))
 
 (def ^{:private true} r-count (atom 0))
 (defn- to-earl[text] (URL. text))
@@ -39,7 +38,9 @@
 
 (def ^{:private true} cache-dir ".web-cache")
 
-(def ^{:private true} disk-cache? false) ; @todo: can't get serialization working
+; @todo: can't get serialization working. Round-tripping is failing.
+; Need special web-cache test for caching whatever is returned by <html-resource> up there on line 27.
+(def ^{:private true} disk-cache? true) 
 
 (defn- custom-nice-get[earl]
   (locking lock
@@ -48,9 +49,9 @@
       (if (nil? cached)
         (do
           (let [fresh (get-gzip earl)]
-            (web-cache/save cache-dir earl (json/write-str fresh))
+            (web-cache/save cache-dir earl fresh)
             fresh))
-        (json/read-str cached))
+        cached)
     )))
 
 (defn nice-get-gzip[earl]

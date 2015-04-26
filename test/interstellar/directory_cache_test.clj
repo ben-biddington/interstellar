@@ -3,7 +3,9 @@
   (:require 
    [clojure.test :refer :all]
    [clojure.core.cache :refer :all]
-   [interstellar.adapters.web-cache :as web-cache]))
+   [interstellar.adapters.web-cache :as web-cache]
+   [interstellar.t-internet :as internet]
+   ))
 
 (def cache-dir ".tmp/")
 (defn- clear[] (.delete (java.io.File. cache-dir)))
@@ -60,3 +62,4 @@
       (let [c (web-cache/new-disk-web-cache cache-dir)]
         (let [found (lookup c "xxx-does-not-exist-xxx")]
           (is (nil? found)))))))
+
