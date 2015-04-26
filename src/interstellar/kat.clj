@@ -72,4 +72,4 @@
 
 (defn kat-info [n]
   "Gets n kat items (imdb-id, kat-rating). Returns them ordered by seeds"
-  (sort-by :index (pmap info-for (detail-items n))))
+  (pmap info-for (detail-items n)))
