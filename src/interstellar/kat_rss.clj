@@ -27,11 +27,11 @@
   (let [tag (first-by-tag tags tagname)]
     (-> tag :content first)))
 
-(defn- rss-links[earl]
+(defn- rss-links[n earl]
   (let [rss-feed (rss earl)]
      (for [item (xml-seq rss-feed) :when (= :item (:tag item))] 
          (struct kat-rss-feed-item
-                 (next-index)
+                 (+ (next-index) (* 100 n))
                  (first-value-by-tag (-> item :content) :link) 
                  (safe-parse-int (first-value-by-tag (-> item :content) :torrent:seeds))
                  (safe-parse-int (first-value-by-tag (-> item :content) :torrent:peers))))))
@@ -45,7 +45,7 @@
 
 (defn- kat-rss-items-page[n]
   (increment-count)
-  (rss-links (str host "/movies/" n "/?rss=true&field=seeders&sorder=desc")))
+  (rss-links n (str host "/movies/" n "/?rss=true&field=seeders&sorder=desc")))
 
 (defn kat-rss-items
   "Find n pages of rss links"
