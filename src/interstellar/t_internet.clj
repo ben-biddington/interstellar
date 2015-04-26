@@ -43,16 +43,15 @@
 (def ^{:private true} disk-cache? true) 
 
 (defn- custom-nice-get[earl]
-  (locking lock
-    (.mkdir (java.io.File. cache-dir))
-    (let [cached (web-cache/get cache-dir earl)]
-      (if (nil? cached)
-        (do
-          (let [fresh (get-gzip earl)]
-            (web-cache/save cache-dir earl fresh)
-            fresh))
-        cached)
-    )))
+  (.mkdir (java.io.File. cache-dir))
+  (let [cached (web-cache/get cache-dir earl)]
+    (if (nil? cached)
+      (do
+        (let [fresh (get-gzip earl)]
+          (web-cache/save cache-dir earl fresh)
+          fresh))
+      cached)
+    ))
 
 (defn nice-get-gzip[earl]
   "Same as <get-gzip> but it only fetches a URL once"
