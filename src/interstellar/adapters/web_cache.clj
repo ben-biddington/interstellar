@@ -16,6 +16,9 @@
 (defn get[cache-dir url]
   (inner/get cache-dir (safe-key url)))
 
+(defn delete[cache-dir url]
+  (inner/delete cache-dir (safe-key url)))
+
 ; @todo: try using this in <t-internet>
 (deftype DiskWebCache [cache-dir] 
   ;; => https://github.com/clojure/core.cache/blob/a77b003d6593f7bde2f27f03ec52310b68aa0ea6/src/main/clojure/clojure/core/cache.clj#L20
@@ -31,5 +34,5 @@
   (evict   [cache e])
   (seed    [cache base]))
 
-(defn new-disk-web-cache[cache_dir]
-  (DiskWebCache. cache_dir))
+(defn new-disk-web-cache[cache-dir]
+  (DiskWebCache. cache-dir))

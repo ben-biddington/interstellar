@@ -1,5 +1,5 @@
 (ns interstellar.internet-test
-  (:refer-clojure :exclude [get set])
+  (:refer-clojure :exclude [get set drop])
   (:require [clojure.test :refer :all]
             [interstellar.t-internet :refer :all :as net]))
 
@@ -10,6 +10,7 @@
 
 (deftest that-you-can-cache-replies
   (testing "for example, requesting the same URL twice only produces one request"
+    (net/drop "http://kickass.to/movies")
     (net/zero)
     (dotimes [n 2]
       (net/nice-get-gzip "http://kickass.to/movies"))

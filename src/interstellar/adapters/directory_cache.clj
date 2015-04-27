@@ -19,4 +19,7 @@
       (nippy/thaw-from-in! (DataInputStream. r)))
     MISSING))
 
+(defn delete [cache-dir name]
+  (when (contains? cache-dir name)
+    (.delete (io/file cache-dir name))))
 

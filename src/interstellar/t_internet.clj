@@ -1,5 +1,5 @@
 (ns interstellar.t-internet
-  (:refer-clojure :exclude [get set])
+  (:refer-clojure :exclude [get set drop])
   (:use net.cgrand.enlive-html)
   (:import java.net.URL) 
   (:import java.lang.String)
@@ -41,6 +41,10 @@
 ; @todo: can't get serialization working. Round-tripping is failing.
 ; Need special web-cache test for caching whatever is returned by <html-resource> up there on line 27.
 (def ^{:private true} disk-cache? true) 
+
+(defn drop[url]
+  "Deletes <url> from the cache if present"
+  (web-cache/delete cache-dir url))
 
 (defn- custom-nice-get[earl]
   (.mkdir (java.io.File. cache-dir))
