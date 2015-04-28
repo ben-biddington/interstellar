@@ -31,8 +31,7 @@
     (fail "The <min-score> cannot be greater than 10.0. (You supplied <%s>.)", min-score))
 
   (let [r (filter (where-score-greater-than-or-equal-to min-score) (title-find count))]
-    ;; (println r)
     ;; {:sequence :imdb-id tt0816692, :title Interstellar, :metascore 74, :score 8.8, :kat-ratings :health}
-    (sort-by :index r)
+    r
     ))
 
