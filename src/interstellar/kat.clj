@@ -1,5 +1,5 @@
 (ns interstellar.kat
-  (:refer-clojure :exclude [get set])
+  (:refer-clojure :exclude [get set drop])
   (:use net.cgrand.enlive-html)
   (:import java.net.URL) 
   (:import java.lang.String)

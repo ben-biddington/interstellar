@@ -50,12 +50,14 @@
                 "plus <" (interstellar.adapters.imdb/request-count) "> omdb API requests"))
       (println (format "Duration: %ds\n" (t/in-seconds (:duration timed-result)))))))
 
+(def search-limit 500)
+
 (defn -main [& args]
   (let [params (p args)]
     (let [count (first params) min-score (second params)]
-      (if (> count 200)
+      (if (> count search-limit)
         (do 
-          (println "Please choose a number < 200 (default = 100)")
+          (println "Please choose a number < " search-limit " (default = 100)")
           (System/exit 1))
         (do 
           (run args count min-score)
