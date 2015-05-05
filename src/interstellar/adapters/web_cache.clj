@@ -5,7 +5,7 @@
    [clojure.core.cache :as cache]
    [interstellar.adapters.directory-cache :as inner]))
 
-(defn safe-key[text] (URLEncoder/encode text))
+(defn safe-key[text] (URLEncoder/encode (str (hash text))))
 
 (defn save[cache-dir url contents]
   (inner/save cache-dir (safe-key url) contents))
