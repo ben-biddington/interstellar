@@ -13,7 +13,8 @@
                 [org.clojars.pjlegato/clansi "1.3.0"]
                 [org.clojure/data.xml "0.0.8"]
                 [clj-time "0.9.0"]
-                [com.taoensso/nippy "2.8.0"]]
+                [com.taoensso/nippy "2.8.0"]
+                [incanter "1.5.6"]]
   :main ^:skip-aot interstellar.adapters.interstellar-cli
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}}
