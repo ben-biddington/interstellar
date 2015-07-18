@@ -14,7 +14,7 @@
 
 (defn- rss[earl] (xml/parse earl))
 
-(def ^{:private true} host "http://kickass.to")
+(def ^{:private true} host "http://kickass.cr")
 
 (def page-size 25)
 
